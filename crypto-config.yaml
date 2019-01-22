@@ -1,0 +1,20 @@
+OrdererOrgs:
+  - Name: Orderer
+    Domain: nid.com
+    Specs:
+      - Hostname: orderer
+
+PeerOrgs:
+  - Name: moha
+    Domain: moha.nid.com
+    Template:
+      Count: 2
+    Users:
+      Count: 1
+
+  - Name: ec
+    Domain: ec.nid.com
+    Template:
+      Count: 2
+    Users:
+      Count: 1
