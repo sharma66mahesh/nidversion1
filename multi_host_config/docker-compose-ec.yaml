@@ -58,7 +58,7 @@ services:
       - CORE_PEER_GOSSIP_ORGLEADER=false
       - CORE_PEER_GOSSIP_USELEADERELECTION=true
       #- CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
-      - CORE_PEER_PROFILE_ENABLED=true
+      # - CORE_PEER_PROFILE_ENABLED=true
       - CORE_PEER_ID=peer0.ec.nid.com
       - CORE_PEER_ADDRESS=peer0.ec.nid.com:7051
       - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.ec.nid.com:7051
@@ -109,7 +109,7 @@ services:
       - CORE_PEER_GOSSIP_ORGLEADER=false
       - CORE_PEER_GOSSIP_USELEADERELECTION=true
       #- CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
-      - CORE_PEER_PROFILE_ENABLED=true
+      # - CORE_PEER_PROFILE_ENABLED=true
       - CORE_PEER_ID=peer1.ec.nid.com
       - CORE_PEER_ADDRESS=peer1.ec.nid.com:7051
       - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.ec.nid.com:7051
