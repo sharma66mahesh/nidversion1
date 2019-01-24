@@ -6,6 +6,7 @@
 version: '3.4'
 
 volumes:
+  orderer.nid.com:
   peer0.moha.nid.com:
   peer1.moha.nid.com:
   
@@ -19,7 +20,6 @@ services:
     container_name: orderer
     image: hyperledger/fabric-orderer:$IMAGE_TAG
     environment:
-      environment:
       - FABRIC_LOGGING_SPEC=DEBUG
       - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
       - ORDERER_GENERAL_GENESISMETHOD=file
@@ -94,7 +94,7 @@ services:
       - CORE_PEER_GOSSIP_ORGLEADER=false
       - CORE_PEER_GOSSIP_USELEADERELECTION=true
       #- CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
-      - CORE_PEER_PROFILE_ENABLED=true
+      # - CORE_PEER_PROFILE_ENABLED=true
       - CORE_PEER_ID=peer0.moha.nid.com
       - CORE_PEER_ADDRESS=peer0.moha.nid.com:7051
       - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.moha.nid.com:7051
@@ -145,7 +145,7 @@ services:
       - CORE_PEER_GOSSIP_ORGLEADER=false
       - CORE_PEER_GOSSIP_USELEADERELECTION=true
       #- CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
-      - CORE_PEER_PROFILE_ENABLED=true
+      # - CORE_PEER_PROFILE_ENABLED=true
       - CORE_PEER_ID=peer1.moha.nid.com
       - CORE_PEER_ADDRESS=peer1.moha.nid.com:7051
       - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.moha.nid.com:7051
@@ -157,7 +157,7 @@ services:
 
     volumes:
         - /var/run/:/var/run/
-        - ../crypto-config/peerOrganizations/moha.nid.com/peers/peer0.moha.nid.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/moha.nid.com/peers/peer1.moha.nid.com/msp:/etc/hyperledger/fabric/msp
         #- ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/ca:/etc/hyperledger/fabric/ca
         - peer1.moha.nid.com:/var/hyperledger/production
     
