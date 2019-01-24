@@ -59,7 +59,7 @@ services:
       - FABRIC_CA_SERVER_TLS_ENABLED=false
       - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.moha.nid.com-cert.pem
       - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/3546ee08d5017e28b29cb84fb6a0c1c99fa93cc3ba58d568f5cbcdf3daf303ee_sk
-    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.org1.example.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA1_PRIVATE_KEY  -b admin:adminpw -d'
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.org1.example.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/3546ee08d5017e28b29cb84fb6a0c1c99fa93cc3ba58d568f5cbcdf3daf303ee_sk  -b admin:adminpw -d'
     volumes:
       - ../crypto-config/peerOrganizations/moha.nid.com/ca/:/etc/hyperledger/fabric-ca-server-config
     container_name: moha-ca
@@ -171,10 +171,10 @@ services:
                     - node.hostname == $MOHA_HOSTNAME
 
     ports:
-            - published: 7051
+            - published: 8051
               target: 7051
               mode: host
-            - published: 7053
+            - published: 8053
               target: 7053
               mode: host
     networks:
