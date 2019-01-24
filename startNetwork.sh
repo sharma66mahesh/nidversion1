@@ -13,7 +13,10 @@ function networkUp() {
 
 function createAndJoinChannel() {
     docker exec cli peer channel create -o orderer.nid.com:7050 -c $CHANNEL_NAME -f /opt/gopath/src/github.com/hyperledger/fabric/channel-artifacts/nid-channel.tx
+    #add peer0 from moha org
     docker exec cli peer channel join -b nid-channel.block
+    #add peer1 from moha org
+    docker exec -e  CORE_PEER_ADDRESS=peer1.moha.nid.com peer channel join -b nid-channel.com
     #add peer from another org
     docker exec -e CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/crypto/peerOrganizations/ec.nid.com/users/Admin@ec.nid.com/msp -e CORE_PEER_ADDRESS=peer0.ec.nid.com:7051 -e CORE_PEER_LOCALMSPID=ecMSP -e CORE_PEER_TLS_ENABLED=false cli peer channel join -b nid-channel.block
     #update anchor peers

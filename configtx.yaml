@@ -18,7 +18,7 @@ Organizations:
     ID: ecMSP
     MSPDir: ./crypto-config/peerOrganizations/ec.nid.com/msp
     AnchorPeers:
-      - Host: peer0.moha.nid.com
+      - Host: peer0.ec.nid.com
         Port: 7051
 
 Orderer: &OrdererDefaults
