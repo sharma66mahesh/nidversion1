@@ -1,0 +1,201 @@
+version: '2'
+
+volumes:
+  orderer.nid.com:
+  peer0.moha.nid.com:
+  peer1.moha.nid.com:
+  peer0.ec.nid.com:
+  peer1.ec.nid.com:
+
+networks:
+  nidnetwork:
+
+services:
+
+  ca.moha.nid.com:
+    image: hyperledger/fabric-ca:$IMAGE_TAG
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca.moha.nid.com
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.moha.nid.com-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/3546ee08d5017e28b29cb84fb6a0c1c99fa93cc3ba58d568f5cbcdf3daf303ee_sk
+    ports:
+      - "7054:7054"
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.moha.nid.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/3546ee08d5017e28b29cb84fb6a0c1c99fa93cc3ba58d568f5cbcdf3daf303ee_sk -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/moha.nid.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca.moha.nid.com
+    networks:
+      - nidnetwork
+
+  ca.ec.nid.com:
+    image: hyperledger/fabric-ca:$IMAGE_TAG
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca.ec.nid.com
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.ec.nid.com-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/abe3a62cc34440813f43fd652068b57d039675ec1b2232b078b68e96a9d61367_sk
+    ports:
+      - "8054:7054"
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.ec.nid.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/abe3a62cc34440813f43fd652068b57d039675ec1b2232b078b68e96a9d61367_sk -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/ec.nid.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca.ec.nid.com
+    networks:
+      - nidnetwork
+
+  orderer.nid.com:
+    extends:
+      file: base/docker-compose-base.yaml
+      service: orderer.nid.com
+    container_name: orderer.nid.com
+    networks:
+      - nidnetwork
+  
+  couchdbmoha0:
+    container_name: couchdbmoha0
+    image: hyperledger/fabric-couchdb:$IMAGE_TAG
+    environment:
+      - COUCHDB_USER=
+      - COUCHDB_PASSWORD=
+    ports:
+      - 5984:5984
+    networks:
+      - nidnetwork
+
+  peer0.moha.nid.com:
+    container_name: peer0.moha.nid.com
+    extends:
+      file: base/docker-compose-base.yaml
+      service: peer0.moha.nid.com
+    environment:
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdbmoha0:5984
+      # The CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME and CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD
+      # provide the credentials for ledger to connect to CouchDB.  The username and password must
+      # match the username and password set for the associated CouchDB.
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=
+    networks:
+      - nidnetwork
+    depends_on:
+      - couchdbmoha0
+
+  couchdbmoha1:
+    container_name: couchdbmoha1
+    image: hyperledger/fabric-couchdb:$IMAGE_TAG
+    environment:
+      - COUCHDB_USER=
+      - COUCHDB_PASSWORD=
+    ports:
+      - 6984:5984
+    networks:
+      - nidnetwork
+  
+  peer1.moha.nid.com:
+    container_name: peer1.moha.nid.com
+    extends:
+      file: base/docker-compose-base.yaml
+      service: peer1.moha.nid.com
+    environment:
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdbmoha1:5984
+      # The CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME and CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD
+      # provide the credentials for ledger to connect to CouchDB.  The username and password must
+      # match the username and password set for the associated CouchDB.
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=
+    networks:
+      - nidnetwork
+    depends_on:
+      - couchdbmoha1
+  
+  couchdbec0:
+    container_name: couchdbec0
+    image: hyperledger/fabric-couchdb:$IMAGE_TAG
+    environment:
+      - COUCHDB_USER=
+      - COUCHDB_PASSWORD=
+    ports:
+      - 7984:5984
+    networks:
+      - nidnetwork
+
+  peer0.ec.nid.com:
+    container_name: peer0.ec.nid.com
+    extends:
+      file: base/docker-compose-base.yaml
+      service: peer0.ec.nid.com
+    environment:
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdbec0:5984
+      # The CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME and CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD
+      # provide the credentials for ledger to connect to CouchDB.  The username and password must
+      # match the username and password set for the associated CouchDB.
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=
+    networks:
+      - nidnetwork
+    depends_on:
+      - couchdbec0
+  
+  couchdbec1:
+    container_name: couchdbec1
+    image: hyperledger/fabric-couchdb:$IMAGE_TAG
+    environment:
+      - COUCHDB_USER=
+      - COUCHDB_PASSWORD=
+    ports:
+      - 8984:5984
+    networks:
+      - nidnetwork
+    
+
+  peer1.ec.nid.com:
+    container_name: peer1.ec.nid.com
+    extends:
+      file: base/docker-compose-base.yaml
+      service: peer1.ec.nid.com
+    environment:
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdbec1:5984
+      # The CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME and CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD
+      # provide the credentials for ledger to connect to CouchDB.  The username and password must
+      # match the username and password set for the associated CouchDB.
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=
+    networks:
+      - nidnetwork
+    depends_on:
+      - couchdbec1
+  
+  cli:
+    container_name: cli
+    image: hyperledger/fabric-tools:$IMAGE_TAG
+    tty: true
+    stdin_open: true
+    environment:
+      - GOPATH=/opt/gopath
+      - CORE_VM_ENDPOINT=unix:////var/run/docker.sock
+      - FABRIC_LOGGING_SPEC=DEBUG
+      - CORE_PEER_ID=cli
+      - CORE_PEER_ADDRESS=peer0.moha.nid.com:7051
+      - CORE_PEER_LOCALMSPID=mohaMSP
+      - CORE_PEER_TLS_ENABLED=false
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/crypto/peerOrganizations/moha.nid.com/users/Admin@moha.nid.com/msp
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: /bin/bash
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./chaincode/:/opt/gopath/src/github.com/chaincode
+      - ./crypto-config/:/opt/gopath/src/github.com/hyperledger/fabric/crypto/
+      - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/channel-artifacts
+      - /home/dryice/go/src/:/opt/gopath/src/
+    depends_on:
+      - orderer.nid.com
+      - peer0.moha.nid.com
+      - peer1.moha.nid.com
+      - peer0.ec.nid.com
+      - peer1.ec.nid.com
+    networks:
+      - nidnetwork

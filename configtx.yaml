@@ -1,0 +1,63 @@
+Organizations:
+
+  - &OrdererOrg
+    Name: OrdererOrg
+    ID: OrdererMSP
+    MSPDIR: ./crypto-config/ordererOrganizations/nid.com/msp
+  
+  - &moha
+    Name: mohaMSP
+    ID: mohaMSP
+    MSPDir: ./crypto-config/peerOrganizations/moha.nid.com/msp
+    AnchorPeers:
+      - Host: peer0.moha.nid.com
+        Port: 7051
+  
+  - &ec
+    Name: ecMSP
+    ID: ecMSP
+    MSPDir: ./crypto-config/peerOrganizations/ec.nid.com/msp
+    AnchorPeers:
+      - Host: peer0.ec.nid.com
+        Port: 7051
+
+Orderer: &OrdererDefaults
+
+  OrdererType: solo
+  Addresses:
+    - orderer.nid.com:7050
+  
+  BatchTimeout: 2s
+  BatchSize:
+    MaxMessageCount: 10
+    AbsoluteMaxBytes: 99 MB
+    PreferredMaxBytes: 512 KB
+  Kafka:
+    Brokers:
+      - 127.0.0.1:9092
+  Organizations:
+
+Application: &ApplicationDefaults
+  Organizations:
+
+
+Profiles:
+
+  TwoOrgsOrdererGenesis:
+    Orderer:
+      <<: *OrdererDefaults
+      Organizations:
+        - *OrdererOrg
+    Consortiums:
+      NIDConsortium:
+        Organizations:
+          - *moha
+          - *ec
+  TwoOrgsChannel:
+    Consortium: NIDConsortium
+    Application:
+      <<: *ApplicationDefaults
+      Organizations:
+        - *moha
+        - *ec
+
