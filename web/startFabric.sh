@@ -20,7 +20,7 @@ fi
 rm -rf ./hfc-key-store
 
 # launch network; create channel and join peer to channel
-cd ../nid-fabric-network
+cd ../nidnetwork
 ./startNetwork.sh
 
 # Now launch the CLI container in order to install, instantiate chaincode

@@ -13,7 +13,7 @@ networks:
 services:
 
   ca.moha.nid.com:
-    image: hyperledger/fabric-ca:$IMAGE_TAG
+    image: hyperledger/fabric-ca:latest
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca.moha.nid.com
@@ -29,7 +29,7 @@ services:
       - nidnetwork
 
   ca.ec.nid.com:
-    image: hyperledger/fabric-ca:$IMAGE_TAG
+    image: hyperledger/fabric-ca:latest
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca.ec.nid.com
@@ -54,7 +54,7 @@ services:
   
   couchdbmoha0:
     container_name: couchdbmoha0
-    image: hyperledger/fabric-couchdb:$IMAGE_TAG
+    image: hyperledger/fabric-couchdb:latest
     environment:
       - COUCHDB_USER=
       - COUCHDB_PASSWORD=
@@ -83,7 +83,7 @@ services:
 
   couchdbmoha1:
     container_name: couchdbmoha1
-    image: hyperledger/fabric-couchdb:$IMAGE_TAG
+    image: hyperledger/fabric-couchdb:latest
     environment:
       - COUCHDB_USER=
       - COUCHDB_PASSWORD=
@@ -112,7 +112,7 @@ services:
   
   couchdbec0:
     container_name: couchdbec0
-    image: hyperledger/fabric-couchdb:$IMAGE_TAG
+    image: hyperledger/fabric-couchdb:latest
     environment:
       - COUCHDB_USER=
       - COUCHDB_PASSWORD=
@@ -141,7 +141,7 @@ services:
   
   couchdbec1:
     container_name: couchdbec1
-    image: hyperledger/fabric-couchdb:$IMAGE_TAG
+    image: hyperledger/fabric-couchdb:latest
     environment:
       - COUCHDB_USER=
       - COUCHDB_PASSWORD=
@@ -171,7 +171,7 @@ services:
   
   cli:
     container_name: cli
-    image: hyperledger/fabric-tools:$IMAGE_TAG
+    image: hyperledger/fabric-tools:latest
     tty: true
     stdin_open: true
     environment:
