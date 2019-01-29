@@ -7,6 +7,17 @@
 # Exit on first error
 set -e
 
+CHANNEL_NAME="nid-channel"
+
+#check if chaincode name is passed
+if [ $# == 0 ]; then
+	CHAINCODE_NAME="nidchain2"
+	CHAINCODE_VERSION="2.0"
+elif [ $# == 2 ]; then
+	CHAINCODE_NAME="$1"
+	CHAINCODE_VERSION="$2"
+fi
+
 # don't rewrite paths for Windows Git Bash users
 export MSYS_NO_PATHCONV=1
 starttime=$(date +%s)
@@ -27,9 +38,18 @@ cd ../nidnetwork
 # and prime the ledger with our 10 cars
 # docker-compose -f ./docker-compose.yml up -d cli
 
-docker exec -e "CORE_PEER_LOCALMSPID=mohaMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/crypto/peerOrganizations/moha.nid.com/users/Admin@moha.nid.com/msp" cli peer chaincode install -n nidchain2 -v 2.0 -p "$CC_SRC_PATH" -l "$LANGUAGE"
-docker exec -e "CORE_PEER_LOCALMSPID=mohaMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/crypto/peerOrganizations/moha.nid.com/users/Admin@moha.nid.com/msp" cli peer chaincode instantiate -o orderer.nid.com:7050 -C nid-channel -n nidchain2 -l "$LANGUAGE" -v 2.0 -c '{"Args":[""]}'
-sleep 10
+#check if chaincode is already installed
+OUTPUT=$(docker exec cli peer chaincode list --installed | grep $CHAINCODE_NAME)
+if [ -z "$OUTPUT" ]; then
+	docker exec -e "CORE_PEER_LOCALMSPID=mohaMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/crypto/peerOrganizations/moha.nid.com/users/Admin@moha.nid.com/msp" cli peer chaincode install -n $CHAINCODE_NAME -v $CHAINCODE_VERSION -p "$CC_SRC_PATH" -l "$LANGUAGE"	
+fi
+
+#check if chaincode is already instantiated on channel
+OUTPUT=$(docker exec cli peer chaincode list --instantiated -C $CHANNEL_NAME | grep $CHAINCODE_NAME)
+if [ -z "$OUTPUT" ]; then
+	docker exec -e "CORE_PEER_LOCALMSPID=mohaMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/crypto/peerOrganizations/moha.nid.com/users/Admin@moha.nid.com/msp" cli peer chaincode instantiate -o orderer.nid.com:7050 -C $CHANNEL_NAME -n $CHAINCODE_NAME -l "$LANGUAGE" -v $CHAINCODE_VERSION -c '{"Args":[""]}'
+fi
+sleep 1
 # docker exec -e "CORE_PEER_LOCALMSPID=Org1MSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp" cli peer chaincode invoke -o orderer.example.com:7050 -C mychannel -n main -c '{"function":"initLedger","Args":[""]}'
 
 printf "\nTotal setup execution time : $(($(date +%s) - starttime)) secs ...\n\n\n"

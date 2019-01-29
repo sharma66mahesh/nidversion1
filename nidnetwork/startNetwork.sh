@@ -41,6 +41,6 @@ networkUp
 
 OUTPUT=$(docker exec cli peer channel list | grep $CHANNEL_NAME)
 
-if [ -z $OUTPUT ]; then
+if [ -z "$OUTPUT" ]; then
     createAndJoinChannel
 fi
