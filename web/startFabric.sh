@@ -38,7 +38,7 @@ cd ../nidnetwork
 if [ "$1" == "prune" ]; then
 	./startNetwork.sh prune
 else 
-	./startNetwork
+	./startNetwork.sh
 fi
 
 # Now launch the CLI container in order to install, instantiate chaincode
