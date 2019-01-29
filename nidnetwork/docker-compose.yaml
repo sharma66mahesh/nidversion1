@@ -18,10 +18,10 @@ services:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca.moha.nid.com
       - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.moha.nid.com-cert.pem
-      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/3546ee08d5017e28b29cb84fb6a0c1c99fa93cc3ba58d568f5cbcdf3daf303ee_sk
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/1bba6af5c17dc37f2c4fb8f311f460c7410df7c70ff2c04995e6cd18f2b787a9_sk
     ports:
       - "7054:7054"
-    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.moha.nid.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/3546ee08d5017e28b29cb84fb6a0c1c99fa93cc3ba58d568f5cbcdf3daf303ee_sk -b admin:adminpw -d'
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.moha.nid.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/1bba6af5c17dc37f2c4fb8f311f460c7410df7c70ff2c04995e6cd18f2b787a9_sk -b admin:adminpw -d'
     volumes:
       - ./crypto-config/peerOrganizations/moha.nid.com/ca/:/etc/hyperledger/fabric-ca-server-config
     container_name: ca.moha.nid.com
@@ -34,10 +34,10 @@ services:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca.ec.nid.com
       - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.ec.nid.com-cert.pem
-      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/abe3a62cc34440813f43fd652068b57d039675ec1b2232b078b68e96a9d61367_sk
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/b67dab69c81243ceb2cfb7d7ccb8abdc501806c3470e403764a60d22590d5dce_sk
     ports:
       - "8054:7054"
-    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.ec.nid.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/abe3a62cc34440813f43fd652068b57d039675ec1b2232b078b68e96a9d61367_sk -b admin:adminpw -d'
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.ec.nid.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/b67dab69c81243ceb2cfb7d7ccb8abdc501806c3470e403764a60d22590d5dce_sk -b admin:adminpw -d'
     volumes:
       - ./crypto-config/peerOrganizations/ec.nid.com/ca/:/etc/hyperledger/fabric-ca-server-config
     container_name: ca.ec.nid.com
@@ -183,7 +183,7 @@ services:
       - CORE_PEER_LOCALMSPID=mohaMSP
       - CORE_PEER_TLS_ENABLED=false
       - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/crypto/peerOrganizations/moha.nid.com/users/Admin@moha.nid.com/msp
-    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: /bin/bash
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
