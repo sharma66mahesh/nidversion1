@@ -16,6 +16,8 @@ if [ $# == 0 ]; then
 elif [ $# == 2 ]; then
 	CHAINCODE_NAME="$1"
 	CHAINCODE_VERSION="$2"
+else
+	printf "Error: Invalid args\n"
 fi
 
 # don't rewrite paths for Windows Git Bash users
