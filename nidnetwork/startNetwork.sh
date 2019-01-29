@@ -31,7 +31,7 @@ sleep 5
 if [ "$1" == "prune" ]; then
     echo "Removing all containers, unused volumes and networks"
     docker rm $(docker ps -aq)
-    sleep 5
+    sleep 15
     docker volume prune
     docker network prune
 fi

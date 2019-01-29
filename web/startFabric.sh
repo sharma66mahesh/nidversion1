@@ -23,20 +23,18 @@ CHAINCODE_VERSION="1.0"
 # don't rewrite paths for Windows Git Bash users
 export MSYS_NO_PATHCONV=1
 starttime=$(date +%s)
-LANGUAGE=${1:-"golang"}
 CC_SRC_PATH=github.com/chaincode/enrollmentChaincode
-if [ "$LANGUAGE" = "node" -o "$LANGUAGE" = "NODE" ]; then
-	CC_SRC_PATH=/opt/gopath/src/github.com/fabcar/node
-fi
+
 
 # clean the keystore
-rm -rf ./hfc-key-store
+
 
 # launch network; create channel and join peer to channel
 cd ../nidnetwork
 
 if [ "$1" == "prune" ]; then
 	./startNetwork.sh prune
+	rm -rf ./hfc-key-store
 else 
 	./startNetwork.sh
 fi
@@ -46,15 +44,15 @@ fi
 # docker-compose -f ./docker-compose.yml up -d cli
 
 #check if chaincode is already installed
-OUTPUT=$(docker exec cli peer chaincode list --installed | grep $CHAINCODE_NAME)
+OUTPUT=$(docker exec cli peer chaincode list --installed | grep -w $CHAINCODE_NAME)
 if [ -z "$OUTPUT" ]; then
-	docker exec cli peer chaincode install -n "$CHAINCODE_NAME" -v "$CHAINCODE_VERSION" -p "$CC_SRC_PATH"	
+	docker exec cli peer chaincode install -n "$CHAINCODE_NAME" -v "$CHAINCODE_VERSION" -p "$CC_SRC_PATH"
 fi
 sleep 1
 #check if chaincode is already instantiated on channel
-OUTPUT=$(docker exec cli peer chaincode list --instantiated -C "$CHANNEL_NAME" | grep $CHAINCODE_NAME)
+OUTPUT=$(docker exec cli peer chaincode list --instantiated -C "$CHANNEL_NAME" | grep -w $CHAINCODE_NAME)
 if [ -z "$OUTPUT" ]; then
-	docker exec cli peer chaincode instantiate -o orderer.nid.com:7050 -C "$CHANNEL_NAME" -n "$CHAINCODE_NAME" -l "$LANGUAGE" -v "$CHAINCODE_VERSION" -c '{"Args":[""]}'
+	docker exec cli peer chaincode instantiate -o orderer.nid.com:7050 -C "$CHANNEL_NAME" -n "$CHAINCODE_NAME" -v "$CHAINCODE_VERSION" -c '{"Args":[""]}'
 fi
 sleep 10
 #docker exec -e "CORE_PEER_LOCALMSPID=Org1MSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp" cli peer chaincode invoke -o orderer.example.com:7050 -C mychannel -n main -c '{"function":"initLedger","Args":[""]}'

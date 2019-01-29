@@ -61,7 +61,7 @@ function invokeChaincode (funcName, args){
 		var args1 = JSON.stringify(args)
 		var request = {
 			//targets: let default to the peer assigned to the client
-			chaincodeId: 'nidchain2',
+			chaincodeId: 'nidchain',
 			fcn: funcName,
 			args: [args1],
 			chainId: 'nid-channel',

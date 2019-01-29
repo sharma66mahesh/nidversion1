@@ -76,7 +76,7 @@ function queryChaincode(funcName, args) {
 		// queryAllCars chaincode function - requires no arguments , ex: args: [''],
 		const request = {
 			//targets : --- letting this default to the peers assigned to the channel
-			chaincodeId: 'nidchain2',
+			chaincodeId: 'nidchain',
 			fcn: funcName,
 			args: marshalArgs(args)
 		};
