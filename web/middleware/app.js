@@ -10,7 +10,6 @@ var path = require('path');
 var invokeCC = require('./invoke.js');
 var queryCC = require('./query.js');
 
-var host = process.env.HOST || 'localhost' ;
 var port = process.env.PORT || 4000;
 
 app.options('*', cors());
@@ -19,8 +18,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 var server = http.createServer(app).listen(port, function() {});
-console.log('****************** SERVER STARTED ************************');
-console.log('***************  http://%s:%s  ******************',host,port);
+console.log(`Server running on port ${port}`);
 server.timeout = 24000;
 
 function getErrorMessage(field) {

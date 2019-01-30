@@ -1,12 +1,4 @@
 'use strict';
-/*
-* Copyright IBM Corp All Rights Reserved
-*
-* SPDX-License-Identifier: Apache-2.0
-*/
-/*
- * Chaincode query
- */
 
 var Fabric_Client = require('fabric-client');
 var path = require('path');
@@ -22,7 +14,7 @@ var peer = fabric_client.newPeer('grpc://localhost:7051');
 channel.addPeer(peer);
 
 //
-var member_user = null;
+// var member_user = null;
 var store_path = path.join(__dirname, 'hfc-key-store');
 console.log('Store path:'+store_path);
 var tx_id = null;
@@ -65,13 +57,10 @@ function queryChaincode(funcName, args) {
 	}).then((user_from_store) => {
 		if (user_from_store && user_from_store.isEnrolled()) {
 			console.log('Successfully loaded user2 from persistence');
-			member_user = user_from_store;
+			var member_user = user_from_store;
 		} else {
 			throw new Error('Failed to get user2.... run registerUser.js');
 		}
-
-		
-
 		// queryCar chaincode function - requires 1 argument, ex: args: ['CAR4'],
 		// queryAllCars chaincode function - requires no arguments , ex: args: [''],
 		const request = {
