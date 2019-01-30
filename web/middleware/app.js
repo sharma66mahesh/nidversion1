@@ -7,8 +7,8 @@ var app = express();
 var cors = require('cors');
 var path = require('path');
 
-var invokeCC = require('./invoke.js');
-var queryCC = require('./query.js');
+var createFormForAdmin = require('./createFormForAdmin.js');
+var listOfPdma = require('./listOfPdma.js');
 
 var port = process.env.PORT || 4000;
 
@@ -42,7 +42,7 @@ app.post('/api/:fcn', async function(req,res) {
 		return;
     }
     
-    invokeCC.invokeChaincode(fcn,args).then(() => {
+    createFormForAdmin.invokeChaincode(fcn,args).then(() => {
         res.json({success: true, message: 'Chaincode invoked', args: args}); 
     }, (err) => {
         res.json({success: false, message: err.message});
@@ -62,7 +62,7 @@ app.get('/api/:fcn', async function(req,res) {
         return;
     }
     
-    queryCC.queryChaincode(fcn,args).then((result) => {
+    listOfPdma.queryChaincode(fcn,args).then((result) => {
         res.json({success: true, message: result}); 
     }, (err) => {
         res.json({success: false, message: err.message});
