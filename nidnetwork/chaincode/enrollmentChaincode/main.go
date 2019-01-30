@@ -19,6 +19,8 @@ package main
 import (
 	"fmt"
 
+	"github.com/hyperledger/fabric/core/chaincode/lib/cid"
+
 	cc "nidchaincode"
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
@@ -68,6 +70,24 @@ func (t *EnrollmentChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response
 
 // Invoke Function accept blockchain code invocations.
 func (t *EnrollmentChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
+	msp, err := cid.GetMSPID(stub)
+
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	if msp != "mohaMSP" && msp != "ecMSP" {
+		return shim.Error("You don't have certificate from valid MSP")
+	}
+
+	certificate, err := cid.GetX509Certificate(stub)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	if certificate.Issuer.CommonName != "ca.moha.nid.com" && certificate.Issuer.CommonName != "ca.ec.nid.com" {
+		return shim.Error("Incorrect certificate issuer name")
+	}
+
 	function, args := stub.GetFunctionAndParameters()
 
 	if function == "init" {

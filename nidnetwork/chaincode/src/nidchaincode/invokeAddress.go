@@ -3,12 +3,20 @@ package nidchaincode
 import (
 	"encoding/json"
 
+	"github.com/hyperledger/fabric/core/chaincode/lib/cid"
+
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	pb "github.com/hyperledger/fabric/protos/peer"
 )
 
 //CreateProvince creates the province provided its provinceUUID and provinceName
 func CreateProvince(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+
+	//Check for attribute permission
+	err := cid.AssertAttributeValue(stub,"CAN_CREATE_PROVINCE","true")
+	if err != nil {
+		return shim.Error(err.Error())
+	}
 
 	//Check for correct number of arguments
 	if len(args) != 1 {
@@ -58,6 +66,12 @@ func CreateProvince(stub shim.ChaincodeStubInterface, args []string) pb.Response
 //CreateDistrict creates district provided its districtUUID, districtName and provinceKey
 func CreateDistrict(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
+	//Check for attribute permission
+	err := cid.AssertAttributeValue(stub,"CAN_CREATE_DISTRICT","true")
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
 	//Check for correct number of arguments
 	if len(args) != 1 {
 		return shim.Error("Invalid argument count\n")
@@ -70,7 +84,7 @@ func CreateDistrict(stub shim.ChaincodeStubInterface, args []string) pb.Response
 	dt := district{}
 	pr := province{}
 
-	err := json.Unmarshal([]byte(args[0]), &partial)
+	err = json.Unmarshal([]byte(args[0]), &partial)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -120,6 +134,12 @@ func CreateDistrict(stub shim.ChaincodeStubInterface, args []string) pb.Response
 //CreateMunicipality creates the municipality provided municipalityUUID, municipalityName, municipalityType, totalWards and districtKey
 func CreateMunicipality(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
+	//Check for attribute permission
+	err := cid.AssertAttributeValue(stub,"CAN_CREATE_MUNICIPALITY","true")
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
 	//Check for correct number of arguments
 	if len(args) != 1 {
 		return shim.Error("Invalid argument count\n")
@@ -132,7 +152,7 @@ func CreateMunicipality(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 	mn := municipality{}
 	dt := district{}
 
-	err := json.Unmarshal([]byte(args[0]), &partial)
+	err = json.Unmarshal([]byte(args[0]), &partial)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -160,7 +180,7 @@ func CreateMunicipality(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 	err = json.Unmarshal(val, &dt)
 
 	//Check if correct municipality type is provided
-	municipalityTypeKey, err := stub.CreateCompositeKey("MunicipalityType",[]string{mn.MunicipalityType})
+	municipalityTypeKey, err := stub.CreateCompositeKey("MunicipalityType", []string{mn.MunicipalityType})
 
 	val, err = stub.GetState(municipalityTypeKey)
 	if err != nil {
@@ -170,7 +190,6 @@ func CreateMunicipality(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 	if val == nil {
 		return shim.Error("Invalid municipality type \n")
 	}
-
 
 	//Marshal the data and put into the ledger
 	// key for the ledger
@@ -194,6 +213,12 @@ func CreateMunicipality(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 
 //GetAllProvinces returns all provinces
 func GetAllProvinces(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+
+	//Check for attribute permission
+	err := cid.AssertAttributeValue(stub,"CAN_READ_PROVINCE","true")
+	if err != nil {
+		return shim.Error(err.Error())
+	}
 
 	if len(args) != 0 {
 		return shim.Error("Expected no arguments")
@@ -236,13 +261,20 @@ func GetAllProvinces(stub shim.ChaincodeStubInterface, args []string) pb.Respons
 
 //GetAllDistrictOfProvince returns all districts of a province or all districts
 func GetAllDistrictOfProvince(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	
+	//Check for attribute permission
+	err := cid.AssertAttributeValue(stub,"CAN_READ_DISTRICT","true")
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
 	input := struct {
 		ProvinceName string `json:"provinceName"`
 	}{}
 	if len(args) != 0 && len(args) != 1 {
 		return shim.Error("Expected zero or one argument")
 	}
-	err := json.Unmarshal([]byte(args[0]), &input)
+	err = json.Unmarshal([]byte(args[0]), &input)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -296,6 +328,13 @@ func GetAllDistrictOfProvince(stub shim.ChaincodeStubInterface, args []string) p
 
 //GetAllMunicipalityOfDistrict returns all municipality of a district or all municipalities
 func GetAllMunicipalityOfDistrict(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	
+	//Check for attribute permission
+	err := cid.AssertAttributeValue(stub,"CAN_READ_MUNICIPALITY","true")
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
 	input := struct {
 		DistrictName string `json:"districtName"`
 	}{}
@@ -303,7 +342,7 @@ func GetAllMunicipalityOfDistrict(stub shim.ChaincodeStubInterface, args []strin
 	if len(args) != 1 && len(args) != 0 {
 		return shim.Error("Expected zero or one argument")
 	}
-	err := json.Unmarshal([]byte(args[0]), &input)
+	err = json.Unmarshal([]byte(args[0]), &input)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -376,6 +415,13 @@ type provinceResponse struct {
 
 //GetAllAddress returns all provinces, districts and municipalities
 func GetAllAddress(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+
+	//Check for attribute permission
+	err := cid.AssertAttributeValue(stub,"CAN_READ_ADDRESS","true")
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
 	if len(args) != 0 {
 		return shim.Error("Expected no arguments")
 	}

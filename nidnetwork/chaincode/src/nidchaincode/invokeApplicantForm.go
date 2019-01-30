@@ -3,10 +3,10 @@ package nidchaincode
 import (
 	"encoding/json"
 
+	"github.com/hyperledger/fabric/core/chaincode/lib/cid"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	pb "github.com/hyperledger/fabric/protos/peer"
 )
-
 
 //CreateApplicantForm creates the applicant form supplied by client in blockchain
 /*
@@ -17,6 +17,12 @@ Municipality type must be "GAUPALIKA", "NAGARPALIKA", "UPAMAHANAGARPALIKA", "MAH
 */
 func CreateApplicantForm(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
+	//Check for attribute permission
+	err := cid.AssertAttributeValue(stub, "CAN_CREATE_APPLICANTFORM", "true")
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
 	var hello int
 	//Check for number of arguments
 	if len(args) != 1 {
@@ -26,7 +32,7 @@ func CreateApplicantForm(stub shim.ChaincodeStubInterface, args []string) pb.Res
 	//Take all the required data to the application struct
 	applicant := applicantForm{}
 
-	err := json.Unmarshal([]byte(args[0]), &applicant)
+	err = json.Unmarshal([]byte(args[0]), &applicant)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -162,7 +168,6 @@ func CreateApplicantForm(stub shim.ChaincodeStubInterface, args []string) pb.Res
 		return shim.Error("Province doesnt exist.")
 	}
 
-
 	//check for District key
 	resultsIterator, err = stub.GetStateByPartialCompositeKey("District", []string{})
 	if err != nil {
@@ -229,7 +234,6 @@ func CreateApplicantForm(stub shim.ChaincodeStubInterface, args []string) pb.Res
 		return shim.Error("Municipality doesnt exist.")
 	}
 
-	
 	//generate key value pair and insert to ledger
 	applicantFormKey, err := stub.CreateCompositeKey("Applicant", []string{applicant.NationalIdentityNumber})
 	if err != nil {
@@ -247,5 +251,4 @@ func CreateApplicantForm(stub shim.ChaincodeStubInterface, args []string) pb.Res
 		return shim.Error(err.Error())
 	}
 	return shim.Success(applicantFormAsBytes)
-
 }

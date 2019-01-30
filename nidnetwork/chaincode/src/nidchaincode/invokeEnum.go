@@ -3,12 +3,19 @@ package nidchaincode
 import (
 	"encoding/json"
 
+	"github.com/hyperledger/fabric/core/chaincode/lib/cid"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	pb "github.com/hyperledger/fabric/protos/peer"
 )
 
 //CreateSex enables to create the values for sex type
 func CreateSex(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+
+	//Check for attribute permission
+	err := cid.AssertAttributeValue(stub, "CAN_CREATE_SEX", "true")
+	if err != nil {
+		return shim.Error(err.Error())
+	}
 
 	//Check for correct number of arguments
 	if len(args) != 1 {
@@ -53,6 +60,12 @@ func CreateSex(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 //CreateCitizenshipType allows to create types for citizenship
 func CreateCitizenshipType(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
+	//Check for attribute permission
+	err := cid.AssertAttributeValue(stub,"CAN_CREATE_CITIZENSHIPTYPE","true")
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
 	//Check for correct number of arguments
 	if len(args) != 1 {
 		return shim.Error("Invalid argument count\n")
@@ -95,6 +108,12 @@ func CreateCitizenshipType(stub shim.ChaincodeStubInterface, args []string) pb.R
 
 //CreateMaritalStatus defines the type of marital status that can be used in the form
 func CreateMaritalStatus(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+
+	//Check for attribute permission
+	err := cid.AssertAttributeValue(stub,"CAN_CREATE_MARITALSTATUS","true")
+	if err != nil {
+		return shim.Error(err.Error())
+	}
 
 	//Check for correct number of arguments
 	if len(args) != 1 {
@@ -139,6 +158,12 @@ func CreateMaritalStatus(stub shim.ChaincodeStubInterface, args []string) pb.Res
 //CreateMunicipalityType defines the municipality types that can be used for storing municipality
 func CreateMunicipalityType(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
+	//Check for attribute permission
+	err := cid.AssertAttributeValue(stub,"CAN_CREATE_MUNICIPALITYTYPE","true")
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
 	//Check for correct number of arguments
 	if len(args) != 1 {
 		return shim.Error("Invalid argument count\n")
@@ -182,11 +207,17 @@ func CreateMunicipalityType(stub shim.ChaincodeStubInterface, args []string) pb.
 //GetSex returns all the defined sex values
 func GetSex(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
+	//Check for attribute permission
+	err := cid.AssertAttributeValue(stub,"CAN_READ_SEX","true")
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
 	if len(args) != 0 {
 		return shim.Error("Expected no arguments")
 	}
 
-	resultsIterator, err := stub.GetStateByPartialCompositeKey("Sex",[]string{})
+	resultsIterator, err := stub.GetStateByPartialCompositeKey("Sex", []string{})
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -224,11 +255,17 @@ func GetSex(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 //GetMaritalStatus returns all the defined marital status
 func GetMaritalStatus(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
+	//Check for attribute permission
+	err := cid.AssertAttributeValue(stub,"CAN_READ_MARITALSTATUS","true")
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
 	if len(args) != 0 {
 		return shim.Error("Expected no arguments")
 	}
 
-	resultsIterator, err := stub.GetStateByPartialCompositeKey("MaritalStatus",[]string{})
+	resultsIterator, err := stub.GetStateByPartialCompositeKey("MaritalStatus", []string{})
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -243,7 +280,7 @@ func GetMaritalStatus(stub shim.ChaincodeStubInterface, args []string) pb.Respon
 
 		//Construct response struct
 		result := struct {
-			MaritalKey string `json:"maritalKey"`
+			MaritalKey    string `json:"maritalKey"`
 			MaritalStatus string `json:"maritalStatus"`
 		}{}
 
@@ -266,11 +303,17 @@ func GetMaritalStatus(stub shim.ChaincodeStubInterface, args []string) pb.Respon
 //GetMunicipalityType returns all the municipality type
 func GetMunicipalityType(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
+	//Check for attribute permission
+	err := cid.AssertAttributeValue(stub,"CAN_READ_PROVINCE","true")
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
 	if len(args) != 0 {
 		return shim.Error("Expected no arguments")
 	}
 
-	resultsIterator, err := stub.GetStateByPartialCompositeKey("MunicipalityType",[]string{})
+	resultsIterator, err := stub.GetStateByPartialCompositeKey("MunicipalityType", []string{})
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -285,8 +328,8 @@ func GetMunicipalityType(stub shim.ChaincodeStubInterface, args []string) pb.Res
 
 		//Construct response struct
 		result := struct {
-			MunicipalityKey string `json:"municipalityKey"`
-			MunicipalityType    string `json:"municipalityType"`
+			MunicipalityKey  string `json:"municipalityKey"`
+			MunicipalityType string `json:"municipalityType"`
 		}{}
 
 		err = json.Unmarshal(kvResult.Value, &result)
@@ -308,11 +351,17 @@ func GetMunicipalityType(stub shim.ChaincodeStubInterface, args []string) pb.Res
 //GetCitizenshipType returns all the citizenship types defined
 func GetCitizenshipType(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
+	//Check for attribute permission
+	err := cid.AssertAttributeValue(stub,"CAN_READ_CITIZENSHIPTYPE","true")
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
 	if len(args) != 0 {
 		return shim.Error("Expected no arguments")
 	}
 
-	resultsIterator, err := stub.GetStateByPartialCompositeKey("CitizenshipType",[]string{})
+	resultsIterator, err := stub.GetStateByPartialCompositeKey("CitizenshipType", []string{})
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -327,8 +376,8 @@ func GetCitizenshipType(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 
 		//Construct response struct
 		result := struct {
-			CitizenKey string `json:"citizenKey"`
-			CitizenshipType    string `json:"citizenshipType"`
+			CitizenKey      string `json:"citizenKey"`
+			CitizenshipType string `json:"citizenshipType"`
 		}{}
 
 		err = json.Unmarshal(kvResult.Value, &result)
