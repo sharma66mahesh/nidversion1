@@ -1,0 +1,114 @@
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+version: '2'
+
+services:
+
+  orderer.nid.com:
+    container_name: orderer.nid.com
+    image: hyperledger/fabric-orderer:$IMAGE_TAG
+    environment:
+      - ORDERER_GENERAL_LOGLEVEL=INFO
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      # enabled TLS
+      # - ORDERER_GENERAL_TLS_ENABLED=true
+      # - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      # - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      # - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: orderer
+    volumes:
+    - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+    - ../crypto-config/ordererOrganizations/nid.com/orderers/orderer.nid.com/msp:/var/hyperledger/orderer/msp
+    # - ../crypto-config/ordererOrganizations/nid.com/orderers/orderer.nid.com/tls/:/var/hyperledger/orderer/tls
+    - orderer.nid.com:/var/hyperledger/production/orderer
+    ports:
+      - 7050:7050
+
+  peer0.moha.nid.com:
+    container_name: peer0.moha.nid.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer0.moha.nid.com
+      - CORE_PEER_ADDRESS=peer0.moha.nid.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.moha.nid.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.moha.nid.com:7051
+      - CORE_PEER_LOCALMSPID=MohaMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/moha.nid.com/peers/peer0.moha.nid.com/msp:/etc/hyperledger/fabric/msp
+        # - ../crypto-config/peerOrganizations/moha.nid.com/peers/peer0.moha.nid.com/tls:/etc/hyperledger/fabric/tls
+        - peer0.moha.nid.com:/var/hyperledger/production
+    ports:
+      - 7051:7051
+      - 7053:7053
+
+  peer1.moha.nid.com:
+    container_name: peer1.moha.nid.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer1.moha.nid.com
+      - CORE_PEER_ADDRESS=peer1.moha.nid.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.moha.nid.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.moha.nid.com:7051
+      - CORE_PEER_LOCALMSPID=MohaMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/moha.nid.com/peers/peer1.moha.nid.com/msp:/etc/hyperledger/fabric/msp
+        # - ../crypto-config/peerOrganizations/moha.nid.com/peers/peer1.moha.nid.com/tls:/etc/hyperledger/fabric/tls
+        - peer1.moha.nid.com:/var/hyperledger/production
+
+    ports:
+      - 8051:7051
+      - 8053:7053
+
+  peer0.ec.nid.com:
+    container_name: peer0.ec.nid.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer0.ec.nid.com
+      - CORE_PEER_ADDRESS=peer0.ec.nid.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.ec.nid.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.ec.nid.com:7051
+      - CORE_PEER_LOCALMSPID=EcMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/ec.nid.com/peers/peer0.ec.nid.com/msp:/etc/hyperledger/fabric/msp
+        # - ../crypto-config/peerOrganizations/ec.nid.com/peers/peer0.ec.nid.com/tls:/etc/hyperledger/fabric/tls
+        - peer0.ec.nid.com:/var/hyperledger/production
+    ports:
+      - 9051:7051
+      - 9053:7053
+
+  peer1.ec.nid.com:
+    container_name: peer1.ec.nid.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer1.ec.nid.com
+      - CORE_PEER_ADDRESS=peer1.ec.nid.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.ec.nid.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.ec.nid.com:7051
+      - CORE_PEER_LOCALMSPID=EcMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/ec.nid.com/peers/peer1.ec.nid.com/msp:/etc/hyperledger/fabric/msp
+        # - ../crypto-config/peerOrganizations/ec.nid.com/peers/peer1.ec.nid.com/tls:/etc/hyperledger/fabric/tls
+        - peer1.ec.nid.com:/var/hyperledger/production
+    ports:
+      - 10051:7051
+      - 10053:7053
