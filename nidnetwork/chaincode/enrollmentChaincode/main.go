@@ -21,7 +21,7 @@ import (
 
 	"github.com/hyperledger/fabric/core/chaincode/lib/cid"
 
-	cc "nidchaincode"
+	cc "github.com/nidchaincode"
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	pb "github.com/hyperledger/fabric/protos/peer"
