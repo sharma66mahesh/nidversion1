@@ -13,8 +13,8 @@ var bearerToken = require('express-bearer-token');
 var cors = require('cors');
 var path = require('path');
 
-var invokeCC = require('./invoke.js');
-var queryCC = require('./query.js');
+var invokeCC = require('./middleware/invoke.js');
+var queryCC = require('./middleware/query.js');
 
 var host = process.env.HOST || 'localhost' ;
 var port = process.env.PORT || 4000;
