@@ -1,20 +1,21 @@
-package nidchaincode
+package nid
 
 import (
 	"encoding/json"
+
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	pb "github.com/hyperledger/fabric/protos/peer"
 )
 
-
-//CreateApplicantForm creates the applicant form supplied by client in blockchain
 /*
 Sex must be "MALE", "FEMALE" or "OTHERS"
 Marital Status must be "MARRIED", "SINGLE", "WIDOW", "WIDOWER", "DIVORCED"
 Citizenship type must be "JANMASIDHA", "JANMAKOADHARMA", "BANSHAJ", "SAMMANARTHA", "ANGIKRIT", "BAIBAHIKANGIKRIT"
 Municipality type must be "GAUPALIKA", "NAGARPALIKA", "UPAMAHANAGARPALIKA", "MAHANAGARPALIKA"
 */
+
+//CreateApplicantForm defined
 func CreateApplicantForm(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
 	var hello int
@@ -22,11 +23,16 @@ func CreateApplicantForm(stub shim.ChaincodeStubInterface, args []string) pb.Res
 	if len(args) != 1 {
 		return shim.Error("Invalid argument count \n")
 	}
+	err := CheckPermission(stub ,"CAN_CREATE_APPLICANTFORM",args) 
+	if err != nil{
+		return shim.Error(err.Error())
+	}
 
+	
 	//Take all the required data to the application struct
 	applicant := applicantForm{}
 
-	err := json.Unmarshal([]byte(args[0]), &applicant)
+	err = json.Unmarshal([]byte(args[0]), &applicant)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -44,7 +50,7 @@ func CreateApplicantForm(stub shim.ChaincodeStubInterface, args []string) pb.Res
 
 		//Construct response struct
 		result := struct {
-			CitizenshipType string `json:"citizenShip"`
+			CitizenshipType string `json:"citizenshipType"`
 		}{}
 
 		err = json.Unmarshal(kvResult.Value, &result)
@@ -125,6 +131,7 @@ func CreateApplicantForm(stub shim.ChaincodeStubInterface, args []string) pb.Res
 		}
 
 	}
+
 	if hello != 3 {
 		return shim.Error("Marital Status Type Invalid")
 	}

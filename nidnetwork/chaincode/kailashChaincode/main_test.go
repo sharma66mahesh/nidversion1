@@ -5,9 +5,10 @@ package main
 import (
 	"encoding/hex"
 	"encoding/json"
+	"github.com/nid"
 	"fmt"
 	"testing"
-	"nid"
+
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	uuid "github.com/satori/go.uuid"
@@ -51,7 +52,7 @@ func getInitArguments() [][]byte {
 	return [][]byte{[]byte("init")}
 }
 
-type Province struct {
+type Province1 struct {
 	UUID     string `json:"provinceUUID"`
 	Name     string `json:"provinceName"`
 	Username string `json:"username"`
@@ -69,11 +70,11 @@ func TestProvinceCreate(t *testing.T) {
 
 	TestUserCreate(t)
 
-	province1 := Province{UUID: String(uuid.Must(uuid.NewV4())), Name: "Province 1", Username: "kailehok1"}
+	province1 := Province1{UUID: String(uuid.Must(uuid.NewV4())), Name: "Province 1", Username:"kailehok"}
 	province1AsBytes, err := json.Marshal(province1)
 	username := struct {
 		Username string `json:"username"`
-	}{Username: "kailehok1"}
+	}{Username: "kailehok"}
 	userBytes, err := json.Marshal(username)
 
 	if err != nil {
@@ -88,14 +89,20 @@ func TestProvinceCreate(t *testing.T) {
 }
 
 func TestUserGroupCreate(t *testing.T) {
-	userGroup1 := nid.UserGroup{Name: "Manager", Permissions: []string{"CAN_CREATE_PROVINCE", "CAN_CREATE_DISTRICT", "CAN_CREATE_MUNICIPALITY", "CAN_VIEW_PROVINCE"}}
+	userGroup1 := nid.UserGroup{Name: "Manager", Permissions: []string{ "CAN_CREATE_DISTRICT", "CAN_CREATE_MUNICIPALITY", "CAN_VIEW_PROVINCE"}}
 	groupBytes, err := json.Marshal(userGroup1)
 	if err != nil {
 		fmt.Println("Error in marshalling")
 		t.FailNow()
 	}
-
+	userGroup2 := nid.UserGroup{Name: "Manager1", Permissions: []string{ "CAN_CREATE_DISTRICT", "CAN_CREATE_MUNICIPALITY", "CAN_VIEW_PROVINCE"}}
+	groupBytes1, err := json.Marshal(userGroup2)
+	if err != nil {
+		fmt.Println("Error in marshalling")
+		t.FailNow()
+	}
 	checkInvoke(t, stub, [][]byte{[]byte("userGroup_create"), groupBytes})
+	checkInvoke(t, stub, [][]byte{[]byte("userGroup_create"), groupBytes1})
 	fmt.Println("abc")
 	checkInvoke(t, stub, [][]byte{[]byte("userGroup_list")})
 

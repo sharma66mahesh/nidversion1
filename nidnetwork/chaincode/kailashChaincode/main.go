@@ -18,8 +18,8 @@ package main
 
 import (
 	"fmt"
-	"nid"
-	
+
+	"github.com/nid"
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	pb "github.com/hyperledger/fabric/protos/peer"
@@ -54,16 +54,6 @@ var bcFunctions = map[string]func(shim.ChaincodeStubInterface, []string) pb.Resp
 	"userGroup_list":          nid.GetUserGroups,
 	"user_create":             nid.CreateUser,
 	"user_list":               nid.GetUserList,
-}
-
-//check for presence of a string in array
-func contains(arr []string, str string) bool {
-	for _, a := range arr {
-		if a == str {
-			return true
-		}
-	}
-	return false
 }
 
 //Init implementation for initialising the chaincode

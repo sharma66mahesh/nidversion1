@@ -8,7 +8,7 @@
 
 CHANNEL_NAME="nid-channel"
 CHAINCODE_NAME="nidchain"
-CHAINCODE_VERSION="1.0"
+CHAINCODE_VERSION="4.0"
 #check if chaincode name is passed
 # if [ $# == 0 ]; then
 # 	CHAINCODE_NAME="nidchain2"
@@ -23,7 +23,7 @@ CHAINCODE_VERSION="1.0"
 # don't rewrite paths for Windows Git Bash users
 export MSYS_NO_PATHCONV=1
 starttime=$(date +%s)
-CC_SRC_PATH=github.com/chaincode/enrollmentChaincode
+CC_SRC_PATH=github.com/kailashChaincode
 
 
 # clean the keystore
@@ -34,7 +34,7 @@ cd ../nidnetwork
 
 if [ "$1" == "prune" ]; then
 	./startNetwork.sh prune
-	rm -rf ./hfc-key-store
+	rm -rf ../web/hfc-key-store
 else 
 	./startNetwork.sh
 fi
