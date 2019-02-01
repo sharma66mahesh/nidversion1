@@ -74,7 +74,7 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
      console.log('user2 was successfully registered and enrolled and is ready to intreact with the fabric network');
 
 }).catch((err) => {
-    console.error('Failed to register: ' + err);
+     throw new Error('Failed to register: ' + err);
 	if(err.toString().indexOf('Authorization') > -1) {
 		console.error('Authorization failures may be caused by having admin credentials from a previous CA instance.\n' +
 		'Try again after deleting the contents of the store directory '+store_path);
