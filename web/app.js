@@ -51,7 +51,7 @@ app.post('/api/:fcn', async function(req,res) {
     }
     
     invokeCC.invokeChaincode(fcn,args).then(() => {
-        res.json({success: true, message: 'Chaincode invoked', args: args}); 
+        res.json({success: true, message: 'Chaincode invoked'}); 
     }, (err) => {
         res.json({success: false, message: err.message});
     });

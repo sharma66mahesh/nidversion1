@@ -76,10 +76,12 @@ function invokeChaincode (funcName, args){
 		let isProposalGood = false;
 		if (proposalResponses && proposalResponses[0].response &&
 			proposalResponses[0].response.status === 200) {
+				//in case of success proposalResponses is a proposalResponse object
 				isProposalGood = true;
 				console.log('Transaction proposal was good');
 			} else {
-				throw new Error('Transaction proposal was bad');
+				//in case of error proposalResponses is a error object
+				throw new Error(proposalResponses[0].message);
 			}
 		if (isProposalGood) {
 			console.log(util.format(
