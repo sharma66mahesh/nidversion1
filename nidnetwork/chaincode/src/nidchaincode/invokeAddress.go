@@ -160,7 +160,7 @@ func CreateMunicipality(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 	err = json.Unmarshal(val, &dt)
 
 	//Check if correct municipality type is provided
-	municipalityTypeKey, err := stub.CreateCompositeKey("MunicipalityType",[]string{mn.MunicipalityType})
+	municipalityTypeKey, err := stub.CreateCompositeKey("MunicipalityType", []string{mn.MunicipalityType})
 
 	val, err = stub.GetState(municipalityTypeKey)
 	if err != nil {
@@ -170,7 +170,6 @@ func CreateMunicipality(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 	if val == nil {
 		return shim.Error("Invalid municipality type \n")
 	}
-
 
 	//Marshal the data and put into the ledger
 	// key for the ledger
@@ -359,7 +358,7 @@ func GetAllMunicipalityOfDistrict(stub shim.ChaincodeStubInterface, args []strin
 type municipalityResponse struct {
 	MunicipalityKey  string `json:"municipalityKey"`
 	MunicipalityName string `json:"municipalityName"`
-	TotalWards       string `json:"totalWards"`
+	TotalWards       int    `json:"totalWards"`
 	MunicipalityType string `json:"municipalityType"`
 }
 type districtResponse struct {

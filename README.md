@@ -44,6 +44,7 @@ as JSON(application/json).
 1.  http://localhost:4000/api/District_create
 2.  POST request
 3.  Select Body and pass 
+```
 { 
 	"args":{	
 		"districtUUID" : "001",
@@ -52,11 +53,13 @@ as JSON(application/json).
 	}
 }
 
+
 #To create Municipality
 
 1.  http://localhost:4000/api/municipality_create
 2.  POST request
 3.  Select Body and pass 
+```
 { 
 		"args":{	
 		    "municipalityUUID" : "001",
@@ -66,6 +69,7 @@ as JSON(application/json).
             "districtKey" : "\u0000District\u0000Province 1\u0000001\u0000"
 	}
 }
+```
 
 
 #To list All Addresses
