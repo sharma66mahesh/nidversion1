@@ -13,13 +13,39 @@ REST-API
 
 Server is started and api can be called at localhost:4000/api/<function>
 
+
+
 #To create user group
 1.  http://localhost:4000/api/userGroup_create
 2.  POST request
 3.  Select Body and pass 
 {
 	"args":{
-        "groupName":"user"
+
+        
+        "groupName":"Manager",
+        "permissions":["CAN_CREATE_PROVINCE","CAN_VIEW_PROVINCE"]
+        
+    }
+}
+as JSON(application/json).
+
+#To create user 
+1.  http://localhost:4000/api/userGroup_create
+2.  POST request
+3.  Select Body and pass 
+{
+	"args":{
+
+        
+        "username":"kailehok",
+        "firstName":"Kailash",
+        "middleName":"Sharan",
+        "lastName":"Baral",
+        "password":"abc",
+        "confirmPassword":"abc",
+        "groupName":"Manager"
+        
     }
 }
 as JSON(application/json).
@@ -30,7 +56,7 @@ as JSON(application/json).
 3.  Select Body and pass 
 {
 	"args":{
-        "username":"user"
+        "username":"Manager"
     }
 }
 as JSON(application/json).
@@ -47,7 +73,7 @@ as JSON(application/json).
     "args": {
         "provinceUUID": "001",
         "provinceName": "Province 1",
-        "username":"user"
+        "username":"Manager"
     }
 }
 ```
@@ -65,7 +91,7 @@ as JSON(application/json).
 		"districtUUID" : "001",
         "districtName" : "Illam",
         "provinceKey" : "\u0000Province\u0000001\u0000" //Province key is generated after invoking create_province
-        "username":"user"
+        "username":"Manager"
 	}
 }
 ```
@@ -83,7 +109,7 @@ as JSON(application/json).
             "totalWards" :"13",
             "municipalityType" : "Nagarpalika",
             "districtKey" : "\u0000District\u0000Province 1\u0000001\u0000",
-            "username":"user"
+            "username":"Manager"
 
 	}
 }
@@ -97,7 +123,7 @@ as JSON(application/json).
 ```
 {
 	"args":{
-        "username":"user"
+        "username":"Manager"
     }
 }
 ```
@@ -138,8 +164,8 @@ as JSON(application/json).
 ```
 {
 	"args":{
-        "sex":"Male",
-        "username":"user"
+        "sex":"Male"
+        
     }
 }
 ```
@@ -152,8 +178,8 @@ as JSON(application/json).
 ```
 {
 	"args":{
-		"maritalStatus":"Married",
-         "username":"user"
+		"maritalStatus":"Married"
+      
 	}
 }
 ```
@@ -165,9 +191,7 @@ as JSON(application/json).
 3.  Select Body and pass 
 ```
 {
-    "args":{
-        "username":"user"
-    }
+    "args":[]
 }
 ```
 #To Get citizenship types
@@ -178,9 +202,8 @@ as JSON(application/json).
 
 ```
 {
-    "args":{
-        "username":"user"
-    }
+    "args":[]
+    
 }
 ```
 #To Get marital status
@@ -189,9 +212,9 @@ as JSON(application/json).
 3.  Select Body and pass 
 ```
 {
-    "args":{
-        "username":"user"
-    }
+    "args":[]
+        
+    
 }
 ```
 #To Get municipality type
@@ -200,9 +223,9 @@ as JSON(application/json).
 3.  Select Body and pass 
 ```
 {
-    "args":{
-        "username":"user"
-    }
+    "args":[]
+     
+    
 }
 ```
 #To Create applicant form
@@ -228,7 +251,7 @@ as JSON(application/json).
         "municipality" : //municipality of applicant
         "wardNumber" : //ward number of applicant
     }
-     "username":"user"
+     "username":""
 }
 ```
 
