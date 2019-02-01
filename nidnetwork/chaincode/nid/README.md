@@ -1,50 +1,241 @@
-# Enrollment Chaincode
+#### NID enrollment version 1
 
-Chaincode for NID enrollment
+To run the project 
+1. Go to web folder
+2. Run export IMAGE_TAG = latest in terminal
+3. Run startFabric.sh script
+4. Install the node modules by running `npm install`
+5. Register admin by running `node enrollAdmin.js`
+6. Register user by running `node registerUser.js`
+7. Start the webserver by running `node app.js`
 
-## Documentation for the functions of chaincode
+REST-API
 
-1. Creation of province
-```
-function name: province_create
-Arguments:
-  JSON
-JSON structure:
+Server is started and api can be called at localhost:4000/api/<function>
+
+
+
+#To create user group
+1.  http://localhost:4000/api/userGroup_create
+2.  POST request
+3.  Select Body and pass 
 {
-    "provinceUUID" : //unique identifier for province 
-    "provinceName" : //name of the province
+	"args":{
+
+        
+        "groupName":"Manager",
+        "permissions":["CAN_CREATE_PROVINCE","CAN_VIEW_PROVINCE"]
+        
+    }
+}
+as JSON(application/json).
+
+#To create user 
+1.  http://localhost:4000/api/userGroup_create
+2.  POST request
+3.  Select Body and pass 
+{
+	"args":{
+
+        
+        "username":"kailehok",
+        "firstName":"Kailash",
+        "middleName":"Sharan",
+        "lastName":"Baral",
+        "password":"abc",
+        "confirmPassword":"abc",
+        "groupName":"Manager"
+        
+    }
+}
+as JSON(application/json).
+
+#To list All Province using Postman
+1.  http://localhost:4000/api/province_list
+2.  GET request
+3.  Select Body and pass 
+{
+	"args":{
+        "username":"Manager"
+    }
+}
+as JSON(application/json).
+
+
+#To create Province
+
+1.  http://localhost:4000/api/province_create
+2.  POST request
+3.  Select Body and pass 
+```
+{
+    
+    "args": {
+        "provinceUUID": "001",
+        "provinceName": "Province 1",
+        "username":"Manager"
+    }
 }
 ```
-2. Creation of district
+as JSON(application/json).
+
+
+#To create District
+
+1.  http://localhost:4000/api/District_create
+2.  POST request
+3.  Select Body and pass 
 ```
-function name: district_create
-Arguments
-  JSON
-{
-    "districtUUID" : //unique identifier for district
-    "districtName" : //Name of the district
-    "provinceKey" : //Key for the province in which the district is to be added
+{ 
+	"args":{	
+		"districtUUID" : "001",
+        "districtName" : "Illam",
+        "provinceKey" : "\u0000Province\u0000001\u0000" //Province key is generated after invoking create_province
+        "username":"Manager"
+	}
 }
 ```
-3. Creation of Municipality
+
+#To create Municipality
+
+1.  http://localhost:4000/api/municipality_create
+2.  POST request
+3.  Select Body and pass 
 ```
-function name: municipality_create
-Argument
-JSON
-{
-    "municipalityUUID" : //unique identifier for municipality
-    "municipalityName" :    //Name of the municipality
-    "totalWards" ://total wards in the municipality
-    "municipalityType" : //type of municipality should be either "Gaupalika", "Nagarpalika", "Upa Mahangarpalika", "Mahanagarpalika"
-    "districtKey" : //the key for district in which it is to be added
+{ 
+		"args":{	
+		    "municipalityUUID" : "001",
+            "municipalityName" :    "Mechi",
+            "totalWards" :"13",
+            "municipalityType" : "Nagarpalika",
+            "districtKey" : "\u0000District\u0000Province 1\u0000001\u0000",
+            "username":"Manager"
+
+	}
 }
 ```
-4. Creation of applicant form
+
+
+#To list All Addresses
+1.  http://localhost:4000/api/address_list
+2.  GET request
+3.  Select Body and pass 
 ```
-function name: applicantform_create
-Argument:
-  JSON
 {
+	"args":{
+        "username":"Manager"
+    }
+}
+```
+as JSON(application/json).
+
+    Response would look like this
+    ```
+    {
+    "success": true,
+    "message": [
+        {
+            "provinceKey": "\u0000Province\u0000001\u0000",
+            "provinceName": "Province 1",
+            "districts": [
+                {
+                    "districtKey": "\u0000District\u0000Province 1\u0000001\u0000",
+                    "districtName": "Illam",
+                    "municipalities": [
+                        {
+                            "municipalityKey": "\u0000Municipality\u0000Illam\u0000001\u0000",
+                            "municipalityName": "Mechi",
+                            "totalWards": 13,
+                            "municipalityType": "Nagarpalika"
+                        }
+                    ]
+                }
+            ]
+        }
+        ]
+    }
+    ```
+
+
+#To create Sex type 
+1.  http://localhost:4000/api/sex_create
+2.  POST request
+3.  Select Body and pass 
+```
+{
+	"args":{
+        "sex":"Male"
+        
+    }
+}
+```
+as JSON(application/json).
+
+#To create marital status  
+1.  http://localhost:4000/api/maritalStatus_create
+2.  POST request
+3.  Select Body and pass 
+```
+{
+	"args":{
+		"maritalStatus":"Married"
+      
+	}
+}
+```
+as JSON(application/json).
+
+#To Get sex values
+1.  http://localhost:4000/api/sex_list
+2.  GET request
+3.  Select Body and pass 
+```
+{
+    "args":[]
+}
+```
+#To Get citizenship types
+
+1.  http://localhost:4000/api/citizenshipType_list
+2.  GET request
+3.  Select Body and pass 
+
+```
+{
+    "args":[]
+    
+}
+```
+#To Get marital status
+1.  http://localhost:4000/api/maritalStatus_list
+2.  GET request
+3.  Select Body and pass 
+```
+{
+    "args":[]
+        
+    
+}
+```
+#To Get municipality type
+1.  http://localhost:4000/api/maritalStatus_list
+2.  GET request
+3.  Select Body and pass 
+```
+{
+    "args":[]
+     
+    
+}
+```
+#To Create applicant form
+1.  http://localhost:4000/api/applicantform_create
+2.  POST request
+3.  Select Body and pass 
+```
+{
+    "args":
+    {
     "nationalIdentityNumber" : //uniue identity number for the applicant:can be of uuid type
 	"applicantName" : {
         "firstName" : //first name of the applicant
@@ -60,105 +251,8 @@ Argument:
         "municipality" : //municipality of applicant
         "wardNumber" : //ward number of applicant
     }
-}
-```
-5. Get all provinces list
-```
-function name: province_list
-Argument: No arguments required
-
-```
-
-6. Get all districts
-```
-function name: district_list
-Argument:
-No argument gives all district
-Providing   JSON with province name gives district of province
-JSON format
-{
-    "provinceName" : //name of the province for which districts is to be returned
+     "username":""
 }
 ```
 
-7. Get municipalities of a district
-```
-function name: municipality_list
-Argument:
-No argument gives all municipality
-Providing   JSON with municipality name gives municipalities of district
-JSON format
-{
-    "districtName": //name of the district for which municipality is to be returned
-}
-```
 
-8. Get all address
-```
-function name: address_list
-Argument:
-No arguments required
-```
-
-
-9. Create sex 
-```
-function name: sex_create
-Argument:
-JSON
-{
-  "sex"://name for sex  
-}
-```
-
-10. Create municpality type 
-```
-function name: municipalityType_create
-Argument:
-JSON
-{
-  "municipalityType"://type for municipality
-}
-```
-11. Create marital status 
-```
-function name: maritalStatus_create
-Argument:
-JSON
-{
-  "maritalStatus"://status of marriage
-}
-```
-12. Create citizenship type 
-```
-function name: citizenshipType_create
-Argument:
-JSON
-{
-  "citizenshipType"://type of citizenship
-}
-```
-13. Get sex values
-```
-function name: sex_list
-Argument:
-    no arguments
-```
-14. Get citizenship types
-```
-function name: citizenshipType_list
-Argument:
-    no arguments
-```
-15. Get marital status
-```
-function name: maritalStatus_list
-Argument:
-    no arguments
-```
-16. Get municipality type
-```
-function name: municipalityType_list
-Argument:
-    no arguments
-```
