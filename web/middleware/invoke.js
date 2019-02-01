@@ -79,7 +79,7 @@ function invokeChaincode (funcName, args){
 				isProposalGood = true;
 				console.log('Transaction proposal was good');
 			} else {
-				console.error('Transaction proposal was bad');
+				throw new Error(proposalResponses.message);
 			}
 		if (isProposalGood) {
 			console.log(util.format(
