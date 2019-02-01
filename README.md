@@ -13,12 +13,25 @@ REST-API
 
 Server is started and api can be called at localhost:4000/api/<function>
 
+#To create user group
+1.  http://localhost:4000/api/userGroup_create
+2.  POST request
+3.  Select Body and pass 
+{
+	"args":{
+        "groupName":"user"
+    }
+}
+as JSON(application/json).
+
 #To list All Province using Postman
 1.  http://localhost:4000/api/province_list
 2.  GET request
 3.  Select Body and pass 
 {
-	"args":[]
+	"args":{
+        "username":"user"
+    }
 }
 as JSON(application/json).
 
@@ -28,14 +41,16 @@ as JSON(application/json).
 1.  http://localhost:4000/api/province_create
 2.  POST request
 3.  Select Body and pass 
+```
 {
-    "success": true,
-    "message": "Chaincode invoked",
+    
     "args": {
         "provinceUUID": "001",
-        "provinceName": "Province 1"
+        "provinceName": "Province 1",
+        "username":"user"
     }
 }
+```
 as JSON(application/json).
 
 
@@ -50,9 +65,10 @@ as JSON(application/json).
 		"districtUUID" : "001",
         "districtName" : "Illam",
         "provinceKey" : "\u0000Province\u0000001\u0000" //Province key is generated after invoking create_province
+        "username":"user"
 	}
 }
-
+```
 
 #To create Municipality
 
@@ -66,7 +82,9 @@ as JSON(application/json).
             "municipalityName" :    "Mechi",
             "totalWards" :"13",
             "municipalityType" : "Nagarpalika",
-            "districtKey" : "\u0000District\u0000Province 1\u0000001\u0000"
+            "districtKey" : "\u0000District\u0000Province 1\u0000001\u0000",
+            "username":"user"
+
 	}
 }
 ```
@@ -76,12 +94,17 @@ as JSON(application/json).
 1.  http://localhost:4000/api/address_list
 2.  GET request
 3.  Select Body and pass 
+```
 {
-	"args":[]
+	"args":{
+        "username":"user"
+    }
 }
+```
 as JSON(application/json).
 
     Response would look like this
+    ```
     {
     "success": true,
     "message": [
@@ -92,11 +115,121 @@ as JSON(application/json).
                 {
                     "districtKey": "\u0000District\u0000Province 1\u0000001\u0000",
                     "districtName": "Illam",
-                    "municipalities": []
+                    "municipalities": [
+                        {
+                            "municipalityKey": "\u0000Municipality\u0000Illam\u0000001\u0000",
+                            "municipalityName": "Mechi",
+                            "totalWards": 13,
+                            "municipalityType": "Nagarpalika"
+                        }
+                    ]
                 }
             ]
         }
         ]
     }
+    ```
+
+
+#To create Sex type 
+1.  http://localhost:4000/api/sex_create
+2.  POST request
+3.  Select Body and pass 
+```
+{
+	"args":{
+        "sex":"Male",
+        "username":"user"
+    }
+}
+```
+as JSON(application/json).
+
+#To create marital status  
+1.  http://localhost:4000/api/maritalStatus_create
+2.  POST request
+3.  Select Body and pass 
+```
+{
+	"args":{
+		"maritalStatus":"Married",
+         "username":"user"
+	}
+}
+```
+as JSON(application/json).
+
+#To Get sex values
+1.  http://localhost:4000/api/sex_list
+2.  GET request
+3.  Select Body and pass 
+```
+{
+    "args":{
+        "username":"user"
+    }
+}
+```
+#To Get citizenship types
+
+1.  http://localhost:4000/api/citizenshipType_list
+2.  GET request
+3.  Select Body and pass 
+
+```
+{
+    "args":{
+        "username":"user"
+    }
+}
+```
+#To Get marital status
+1.  http://localhost:4000/api/maritalStatus_list
+2.  GET request
+3.  Select Body and pass 
+```
+{
+    "args":{
+        "username":"user"
+    }
+}
+```
+#To Get municipality type
+1.  http://localhost:4000/api/maritalStatus_list
+2.  GET request
+3.  Select Body and pass 
+```
+{
+    "args":{
+        "username":"user"
+    }
+}
+```
+#To Create applicant form
+1.  http://localhost:4000/api/applicantform_create
+2.  POST request
+3.  Select Body and pass 
+```
+{
+    "args":
+    {
+    "nationalIdentityNumber" : //uniue identity number for the applicant:can be of uuid type
+	"applicantName" : {
+        "firstName" : //first name of the applicant
+        "middleName" : //middle name of the applicant, can be empty
+        "lastName": //last name of the applicant
+    }
+	"dateOfBirthBS" : //date of birth
+	"sex" : //Sex can be of Male, Female or Others type
+    "maritalStatus" : //can be one of "Married", "Single", "Widow", "Widower", "Divorced"
+	"permanentAddress": {
+        "province" : //province of applicant
+        "district" : //district of applicant
+        "municipality" : //municipality of applicant
+        "wardNumber" : //ward number of applicant
+    }
+     "username":"user"
+}
+```
 
 
