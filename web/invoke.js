@@ -42,13 +42,13 @@ function invokeChaincode (funcName, args){
 		fabric_client.setCryptoSuite(crypto_suite);
 
 		// get the enrolled user from persistence, this user will sign all requests
-		return fabric_client.getUserContext('user2', true);
+		return fabric_client.getUserContext('usertest', true);
 	}).then((user_from_store) => {
 		if (user_from_store && user_from_store.isEnrolled()) {
-			console.log('Successfully loaded user2 from persistence');
+			console.log('Successfully loaded usertest from persistence');
 			member_user = user_from_store;
 		} else {
-			throw new Error('Failed to get user2.... run registerUser.js');
+			throw new Error('Failed to get usertest.... run registerUser.js');
 		}
 
 		// get a transaction id object based on the current user assigned to fabric client
