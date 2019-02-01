@@ -34,7 +34,7 @@ cd ../nidnetwork
 
 if [ "$1" == "prune" ]; then
 	./startNetwork.sh prune
-	rm -rf ../web/middleware/hfc-key-store
+	rm -rf ../web/hfc-key-store
 else 
 	./startNetwork.sh
 fi
