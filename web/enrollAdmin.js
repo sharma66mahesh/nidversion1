@@ -71,5 +71,5 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 }).then(() => {
     console.log('Assigned the admin user to the fabric client ::' + admin_user.toString());
 }).catch((err) => {
-    console.error('Failed to enroll admin: ' + err);
+    throw new Error('Failed to enroll admin: ' + err);
 });

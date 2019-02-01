@@ -79,7 +79,7 @@ function invokeChaincode (funcName, args){
 				isProposalGood = true;
 				console.log('Transaction proposal was good');
 			} else {
-				console.error('Transaction proposal was bad');
+				throw new Error('Transaction proposal was bad');
 			}
 		if (isProposalGood) {
 			console.log(util.format(
@@ -125,7 +125,7 @@ function invokeChaincode (funcName, args){
 					// now let the application know what happened
 					var return_status = {event_status : code, tx_id : transaction_id_string};
 					if (code !== 'VALID') {
-						console.error('The transaction was invalid, code = ' + code);
+						throw new Error('The transaction was invalid, code = ' + code);
 						resolve(return_status); // we could use reject(new Error('Problem with the tranaction, event status ::'+code));
 					} else {
 						console.log('The transaction has been committed on peer ' + event_hub._ep._endpoint.addr);
@@ -149,7 +149,7 @@ function invokeChaincode (funcName, args){
 		if (results && results[0] && results[0].status === 'SUCCESS') {
 			console.log('Successfully sent transaction to the orderer.');
 		} else {
-			console.error('Failed to order the transaction. Error code: ' + response.status);
+			throw new Error('Failed to order the transaction. Error code: ' + response.status);
 		}
 
 		if(results && results[1] && results[1].event_status === 'VALID') {
@@ -158,7 +158,7 @@ function invokeChaincode (funcName, args){
 			console.log('Transaction failed to be committed to the ledger due to ::'+results[1].event_status);
 		}
 	}).catch((err) => {
-		console.error('Failed to invoke successfully :: ' + err);
+		throw new Error('Failed to invoke successfully :: ' + err);
 	});
 }
 
