@@ -19,6 +19,7 @@ Server is started and api can be called at localhost:4000/api/<function>
 1.  http://localhost:4000/api/userGroup_create
 2.  POST request
 3.  Select Body and pass 
+```
 {
 	"args":{
 
@@ -28,12 +29,14 @@ Server is started and api can be called at localhost:4000/api/<function>
         
     }
 }
+```
 as JSON(application/json).
 
 #To create user 
 1.  http://localhost:4000/api/userGroup_create
 2.  POST request
 3.  Select Body and pass 
+```
 {
 	"args":{
 
@@ -48,17 +51,20 @@ as JSON(application/json).
         
     }
 }
+```
 as JSON(application/json).
 
 #To list All Province using Postman
 1.  http://localhost:4000/api/province_list
 2.  GET request
 3.  Select Body and pass 
+```
 {
 	"args":{
         "username":"Manager"
     }
 }
+```
 as JSON(application/json).
 
 
