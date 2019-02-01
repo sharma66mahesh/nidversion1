@@ -523,7 +523,7 @@ func GetAllMunicipalityOfDistrict(stub shim.ChaincodeStubInterface, args []strin
 type municipalityResponse struct {
 	MunicipalityKey  string `json:"municipalityKey"`
 	MunicipalityName string `json:"municipalityName"`
-	TotalWards       string `json:"totalWards"`
+	TotalWards       int `json:"totalWards"`
 	MunicipalityType string `json:"municipalityType"`
 }
 type districtResponse struct {
