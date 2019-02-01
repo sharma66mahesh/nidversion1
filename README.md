@@ -48,7 +48,7 @@ as JSON(application/json).
         
     }
 }
-as JSON(application/json).
+as JSON(application/json).  
 
 #To list All Province using Postman
 1.  http://localhost:4000/api/province_list
