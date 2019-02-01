@@ -55,7 +55,7 @@ as JSON(application/json).
 2.  GET request
 3.  Select Body and pass 
 {
-	"args":{
+	"args":{ 
         "username":"Manager"
     }
 }
