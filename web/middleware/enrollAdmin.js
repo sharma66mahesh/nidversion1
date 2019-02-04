@@ -10,6 +10,7 @@
 
 var Fabric_Client = require('fabric-client');
 var Fabric_CA_Client = require('fabric-ca-client');
+var CouchDB_KVS = require('fabric-client/lib/impl/CouchDBKeyValueStore');
 
 var path = require('path');
 var util = require('util');
@@ -20,18 +21,19 @@ var fabric_client = new Fabric_Client();
 var fabric_ca_client = null;
 var admin_user = null;
 var member_user = null;
+var couch_url = "http://localhost:5984";
 var store_path = path.join(__dirname, 'hfc-key-store');
 console.log(' Store path:'+store_path);
 
 // create the key value store as defined in the fabric-client/config/default.json 'key-value-store' setting
-Fabric_Client.newDefaultKeyValueStore({ path: store_path
+new CouchDB_KVS({ url: couch_url
 }).then((state_store) => {
     // assign the store to the fabric client
     fabric_client.setStateStore(state_store);
     var crypto_suite = Fabric_Client.newCryptoSuite();
     // use the same location for the state store (where the users' certificate are kept)
     // and the crypto store (where the users' keys are kept)
-    var crypto_store = Fabric_Client.newCryptoKeyStore({path: store_path});
+    var crypto_store = Fabric_Client.newCryptoKeyStore(CouchDB_KVS,{url:couch_url});
     crypto_suite.setCryptoKeyStore(crypto_store);
     fabric_client.setCryptoSuite(crypto_suite);
     var	tlsOptions = {
