@@ -19,6 +19,7 @@ Server is started and api can be called at localhost:4000/api/<function>
 1.  http://localhost:4000/api/userGroup_create
 2.  POST request
 3.  Select Body and pass 
+```
 {
 	"args":{
 
@@ -28,12 +29,14 @@ Server is started and api can be called at localhost:4000/api/<function>
         
     }
 }
+```
 as JSON(application/json).
 
 #To create user 
-1.  http://localhost:4000/api/userGroup_create
+1.  http://localhost:4000/api/user_create
 2.  POST request
 3.  Select Body and pass 
+```
 {
 	"args":{
 
@@ -48,17 +51,20 @@ as JSON(application/json).
         
     }
 }
+```
 as JSON(application/json).  
 
 #To list All Province using Postman
 1.  http://localhost:4000/api/province_list
 2.  GET request
 3.  Select Body and pass 
+```
 {
 	"args":{ 
-        "username":"Manager"
+        "username":"kailehok"
     }
 }
+```
 as JSON(application/json).
 
 
@@ -73,7 +79,7 @@ as JSON(application/json).
     "args": {
         "provinceUUID": "001",
         "provinceName": "Province 1",
-        "username":"Manager"
+        "username":"kailehok"
     }
 }
 ```
@@ -91,7 +97,7 @@ as JSON(application/json).
 		"districtUUID" : "001",
         "districtName" : "Illam",
         "provinceKey" : "\u0000Province\u0000001\u0000" //Province key is generated after invoking create_province
-        "username":"Manager"
+        "username":"kailehok"
 	}
 }
 ```
@@ -109,7 +115,7 @@ as JSON(application/json).
             "totalWards" :"13",
             "municipalityType" : "Nagarpalika",
             "districtKey" : "\u0000District\u0000Province 1\u0000001\u0000",
-            "username":"Manager"
+            "username":"kailehok"
 
 	}
 }
@@ -123,7 +129,7 @@ as JSON(application/json).
 ```
 {
 	"args":{
-        "username":"Manager"
+        "username":"kailehok"
     }
 }
 ```
