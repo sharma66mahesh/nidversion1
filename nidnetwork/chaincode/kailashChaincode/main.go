@@ -19,7 +19,7 @@ package main
 import (
 	"fmt"
 
-	cc "nidchaincode"
+	"github.com/nid"
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	pb "github.com/hyperledger/fabric/protos/peer"
@@ -34,22 +34,26 @@ type EnrollmentChaincode struct {
 
 //Mapping the invoke functions
 var bcFunctions = map[string]func(shim.ChaincodeStubInterface, []string) pb.Response{
-	"province_create":         cc.CreateProvince,
-	"district_create":         cc.CreateDistrict,
-	"municipality_create":     cc.CreateMunicipality,
-	"applicantform_create":    cc.CreateApplicantForm,
-	"address_list":            cc.GetAllAddress,
-	"province_list":           cc.GetAllProvinces,
-	"district_list":           cc.GetAllDistrictOfProvince,
-	"municipality_list":       cc.GetAllMunicipalityOfDistrict,
-	"sex_create":              cc.CreateSex,
-	"maritalStatus_create":    cc.CreateMaritalStatus,
-	"citizenshipType_create":  cc.CreateCitizenshipType,
-	"municipalityType_create": cc.CreateMunicipalityType,
-	"sex_list":                cc.GetSex,
-	"maritalStatus_list":      cc.GetMaritalStatus,
-	"citizenshipType_list":    cc.GetCitizenshipType,
-	"municipalityType_list":   cc.GetMunicipalityType,
+	"province_create":         nid.CreateProvince,
+	"district_create":         nid.CreateDistrict,
+	"municipality_create":     nid.CreateMunicipality,
+	"applicantform_create":    nid.CreateApplicantForm,
+	"address_list":            nid.GetAllAddress,
+	"province_list":           nid.GetAllProvinces,
+	"district_list":           nid.GetAllDistrictOfProvince,
+	"municipality_list":       nid.GetAllMunicipalityOfDistrict,
+	"sex_create":              nid.CreateSex,
+	"maritalStatus_create":    nid.CreateMaritalStatus,
+	"citizenshipType_create":  nid.CreateCitizenshipType,
+	"municipalityType_create": nid.CreateMunicipalityType,
+	"sex_list":                nid.GetSex,
+	"maritalStatus_list":      nid.GetMaritalStatus,
+	"citizenshipType_list":    nid.GetCitizenshipType,
+	"municipalityType_list":   nid.GetMunicipalityType,
+	"userGroup_create":        nid.CreateUserGroup,
+	"userGroup_list":          nid.GetUserGroups,
+	"user_create":             nid.CreateUser,
+	"user_list":               nid.GetUserList,
 }
 
 //Init implementation for initialising the chaincode

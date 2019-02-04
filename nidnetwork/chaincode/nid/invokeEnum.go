@@ -1,4 +1,4 @@
-package nidchaincode
+package nid
 
 import (
 	"encoding/json"
@@ -7,8 +7,8 @@ import (
 	pb "github.com/hyperledger/fabric/protos/peer"
 )
 
-//CreateSex enables to create the values for sex type
-func CreateSex(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+//CreateSex defined
+func CreateSex(stub shim.ChaincodeStubInterface,  args []string) pb.Response {
 
 	//Check for correct number of arguments
 	if len(args) != 1 {
@@ -50,8 +50,8 @@ func CreateSex(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
 }
 
-//CreateCitizenshipType allows to create types for citizenship
-func CreateCitizenshipType(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+//CreateCitizenshipType defined
+func CreateCitizenshipType(stub shim.ChaincodeStubInterface,  args []string) pb.Response {
 
 	//Check for correct number of arguments
 	if len(args) != 1 {
@@ -93,8 +93,8 @@ func CreateCitizenshipType(stub shim.ChaincodeStubInterface, args []string) pb.R
 
 }
 
-//CreateMaritalStatus defines the type of marital status that can be used in the form
-func CreateMaritalStatus(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+//CreateMaritalStatus defined
+func CreateMaritalStatus(stub shim.ChaincodeStubInterface,  args []string) pb.Response {
 
 	//Check for correct number of arguments
 	if len(args) != 1 {
@@ -136,8 +136,8 @@ func CreateMaritalStatus(stub shim.ChaincodeStubInterface, args []string) pb.Res
 
 }
 
-//CreateMunicipalityType defines the municipality types that can be used for storing municipality
-func CreateMunicipalityType(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+//CreateMunicipalityType defined
+func CreateMunicipalityType(stub shim.ChaincodeStubInterface,  args []string) pb.Response {
 
 	//Check for correct number of arguments
 	if len(args) != 1 {
@@ -179,8 +179,8 @@ func CreateMunicipalityType(stub shim.ChaincodeStubInterface, args []string) pb.
 
 }
 
-//GetSex returns all the defined sex values
-func GetSex(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+//GetSex defined
+func GetSex(stub shim.ChaincodeStubInterface,  args []string) pb.Response {
 
 	if len(args) != 0 {
 		return shim.Error("Expected no arguments")
@@ -221,8 +221,8 @@ func GetSex(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	return shim.Success(resultsAsBytes)
 }
 
-//GetMaritalStatus returns all the defined marital status
-func GetMaritalStatus(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+//GetMaritalStatus defined
+func GetMaritalStatus(stub shim.ChaincodeStubInterface,  args []string) pb.Response {
 
 	if len(args) != 0 {
 		return shim.Error("Expected no arguments")
@@ -263,8 +263,8 @@ func GetMaritalStatus(stub shim.ChaincodeStubInterface, args []string) pb.Respon
 	return shim.Success(resultsAsBytes)
 }
 
-//GetMunicipalityType returns all the municipality type
-func GetMunicipalityType(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+//GetMunicipalityType defined
+func GetMunicipalityType(stub shim.ChaincodeStubInterface,  args []string) pb.Response {
 
 	if len(args) != 0 {
 		return shim.Error("Expected no arguments")
@@ -305,8 +305,8 @@ func GetMunicipalityType(stub shim.ChaincodeStubInterface, args []string) pb.Res
 	return shim.Success(resultsAsBytes)
 }
 
-//GetCitizenshipType returns all the citizenship types defined
-func GetCitizenshipType(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+//GetCitizenshipType defined
+func GetCitizenshipType(stub shim.ChaincodeStubInterface,  args []string) pb.Response {
 
 	if len(args) != 0 {
 		return shim.Error("Expected no arguments")

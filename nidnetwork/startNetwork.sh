@@ -26,21 +26,21 @@ function createAndJoinChannel() {
 
 echo "Stopping all running containers"
 docker stop $(docker ps -q)
-sleep 2
+sleep 5
 
 if [ "$1" == "prune" ]; then
     echo "Removing all containers, unused volumes and networks"
     docker rm $(docker ps -aq)
+    sleep 15
     docker volume prune
     docker network prune
 fi
-
 networkUp
 
 #check if channel is already created. If not create and join peers to it
 
 OUTPUT=$(docker exec cli peer channel list | grep $CHANNEL_NAME)
 
-if [ -z $OUTPUT ]; then
+if [ -z "$OUTPUT" ]; then
     createAndJoinChannel
 fi

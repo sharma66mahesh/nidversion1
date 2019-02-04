@@ -1,13 +1,80 @@
-package nidchaincode
+package nid
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	pb "github.com/hyperledger/fabric/protos/peer"
 )
 
-//CreateProvince creates the province provided its provinceUUID and provinceName
+//check for presence of a string in array
+func contains(arr []string, str string) bool {
+	for _, a := range arr {
+		if a == str {
+			return true
+		}
+	}
+	return false
+}
+
+//CheckPermission defined
+func CheckPermission(stub shim.ChaincodeStubInterface, value string, args []string) error {
+
+	user := struct {
+		Username string `json:"username"`
+	}{}
+	err := json.Unmarshal([]byte(args[0]), &user)
+	if err != nil {
+		return err
+	}
+
+	userKey, err := stub.CreateCompositeKey("User", []string{user.Username})
+	if err != nil {
+		return err
+	}
+	userBytes, _ := stub.GetState(userKey)
+	if len(userBytes) == 0 {
+		return fmt.Errorf("Username doesnt exists")
+	}
+
+	group := struct {
+		GroupName string `json:"groupName"`
+	}{}
+	err = json.Unmarshal(userBytes, &group)
+	if err != nil {
+		return err
+	}
+
+	groupKey, err := stub.CreateCompositeKey("UserGroup", []string{group.GroupName})
+	if err != nil {
+		return err
+	}
+	groupBytes, _ := stub.GetState(groupKey)
+
+	permission := struct {
+		Permissions []string `json:"permissions"`
+	}{}
+
+	err = json.Unmarshal(groupBytes, &permission)
+	if err != nil {
+		return err
+	}
+
+	check := contains(permission.Permissions, value)
+	fmt.Println(value)
+	if check == false {
+
+		return fmt.Errorf("Permission denied")
+
+	}
+	fmt.Println(check)
+
+	return err
+
+}
+
+//CreateProvince defined
 func CreateProvince(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
 	//Check for correct number of arguments
@@ -15,20 +82,74 @@ func CreateProvince(stub shim.ChaincodeStubInterface, args []string) pb.Response
 		return shim.Error("Invalid argument count\n")
 	}
 
+
+	err := CheckPermission(stub ,"CAN_CREATE_PROVINCE",args)
+	fmt.Println(err)
+		if err != nil {
+		 return shim.Error(err.Error())
+	}
+	// user := struct {
+	// 	Username string `json:"username"`
+	// }{}
+	// err := json.Unmarshal([]byte(args[0]), &user)
+	// if err != nil {
+	// 	return shim.Error(err.Error())
+	// }
+
+	// userKey, err := stub.CreateCompositeKey("User", []string{user.Username})
+	// if err != nil {
+	// 	return shim.Error(err.Error())
+	// }
+	// userBytes, _ := stub.GetState(userKey)
+	// if len(userBytes) == 0 {
+	// 	return shim.Error("Username doesnt exists")
+	// }
+
+	// group := struct{
+	// 	GroupName string `json:"groupName"`
+	// }{}
+	// err = json.Unmarshal(userBytes, &group)
+	// if err != nil {
+	// 	return shim.Error(err.Error())
+	// }
+
+	// groupKey, err :=stub.CreateCompositeKey("UserGroup", []string{group.GroupName})
+	// if err != nil {
+	// 	return shim.Error(err.Error())
+	// }
+	// groupBytes, _ := stub.GetState(groupKey)
+
+	// permission := struct{
+	// 	Permissions []string `json:"permissions"`
+	// }{}
+
+	// err = json.Unmarshal(groupBytes, &permission)
+	// if err != nil {
+	// 	return shim.Error(err.Error())
+	// }
+
+	// check := contains(permission.Permissions,"CAN_CREATE_PROVINCE")
+
+	// if check == false {
+
+	// 	   return shim.Error("Permission denied")
+
+	//    }
+
 	//Take the required structs from the argument
 	partial := struct {
 		UUID string `json:"provinceUUID"`
 	}{}
-	pr := province{}
+	pr := Province{}
 
-	errp := json.Unmarshal([]byte(args[0]), &partial)
-	if errp != nil {
-		return shim.Error(errp.Error())
+	err = json.Unmarshal([]byte(args[0]), &partial)
+	if err != nil {
+		return shim.Error(err.Error())
 	}
 
-	errf := json.Unmarshal([]byte(args[0]), &pr)
-	if errf != nil {
-		return shim.Error(errf.Error())
+	err = json.Unmarshal([]byte(args[0]), &pr)
+	if err != nil {
+		return shim.Error(err.Error())
 	}
 
 	if partial.UUID == "" {
@@ -55,22 +176,26 @@ func CreateProvince(stub shim.ChaincodeStubInterface, args []string) pb.Response
 	return shim.Success(provinceAsBytes)
 }
 
-//CreateDistrict creates district provided its districtUUID, districtName and provinceKey
+//CreateDistrict defined
 func CreateDistrict(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
 	//Check for correct number of arguments
 	if len(args) != 1 {
 		return shim.Error("Invalid argument count\n")
 	}
+	err := CheckPermission(stub, "CAN_CREATE_DISTRICT", args)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
 
 	//Take the required structs from the argument
 	partial := struct {
 		UUID string `json:"districtUUID"`
 	}{}
-	dt := district{}
-	pr := province{}
+	dt := District{}
+	pr := Province{}
 
-	err := json.Unmarshal([]byte(args[0]), &partial)
+	err = json.Unmarshal([]byte(args[0]), &partial)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -117,22 +242,28 @@ func CreateDistrict(stub shim.ChaincodeStubInterface, args []string) pb.Response
 	return shim.Success(nil)
 }
 
-//CreateMunicipality creates the municipality provided municipalityUUID, municipalityName, municipalityType, totalWards and districtKey
+//CreateMunicipality defined
 func CreateMunicipality(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+
+	var hello int
 
 	//Check for correct number of arguments
 	if len(args) != 1 {
 		return shim.Error("Invalid argument count\n")
 	}
 
+	err := CheckPermission(stub, "CAN_CREATE_MUNICIPALITY", args)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
 	//Take the required structs from the argument
 	partial := struct {
 		UUID string `json:"municipalityUUID"`
 	}{}
-	mn := municipality{}
-	dt := district{}
+	mn := Municipality{}
+	dt := District{}
 
-	err := json.Unmarshal([]byte(args[0]), &partial)
+	err = json.Unmarshal([]byte(args[0]), &partial)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -159,18 +290,38 @@ func CreateMunicipality(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 
 	err = json.Unmarshal(val, &dt)
 
-	//Check if correct municipality type is provided
-	municipalityTypeKey, err := stub.CreateCompositeKey("MunicipalityType",[]string{mn.MunicipalityType})
-
-	val, err = stub.GetState(municipalityTypeKey)
+	//check for Municipality type
+	resultsIterator, err := stub.GetStateByPartialCompositeKey("MunicipalityType", []string{})
 	if err != nil {
 		return shim.Error(err.Error())
 	}
+	defer resultsIterator.Close()
+	for resultsIterator.HasNext() {
+		kvResult, err := resultsIterator.Next()
+		if err != nil {
+			return shim.Error(err.Error())
+		}
 
-	if val == nil {
-		return shim.Error("Invalid municipality type \n")
+		//Construct response struct
+		result := struct {
+			MunicipalityType string `json:"municipalityType"`
+		}{}
+
+		err = json.Unmarshal(kvResult.Value, &result)
+		if err != nil {
+			return shim.Error(err.Error())
+		}
+
+		if result.MunicipalityType == mn.MunicipalityType {
+			hello = 1
+
+			break
+		}
+
 	}
-
+	if hello != 1 {
+		return shim.Error("Municipality Type Invalid")
+	}
 
 	//Marshal the data and put into the ledger
 	// key for the ledger
@@ -192,13 +343,17 @@ func CreateMunicipality(stub shim.ChaincodeStubInterface, args []string) pb.Resp
 	return shim.Success(nil)
 }
 
-//GetAllProvinces returns all provinces
+//GetAllProvinces defined
 func GetAllProvinces(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
-	if len(args) != 0 {
-		return shim.Error("Expected no arguments")
+	if len(args) != 1 {
+		return shim.Error("Invalid argument count\n")
 	}
 
+	err := CheckPermission(stub, "CAN_VIEW_PROVINCE", args)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
 	resultsIterator, err := stub.GetStateByPartialCompositeKey("Province", []string{})
 	if err != nil {
 		return shim.Error(err.Error())
@@ -234,15 +389,20 @@ func GetAllProvinces(stub shim.ChaincodeStubInterface, args []string) pb.Respons
 	return shim.Success(resultsAsBytes)
 }
 
-//GetAllDistrictOfProvince returns all districts of a province or all districts
+//GetAllDistrictOfProvince defined
 func GetAllDistrictOfProvince(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+
+	err := CheckPermission(stub, "CAN_VIEW_DISTRICT", args)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
 	input := struct {
 		ProvinceName string `json:"provinceName"`
 	}{}
-	if len(args) != 0 && len(args) != 1 {
-		return shim.Error("Expected zero or one argument")
+	if len(args) != 1 {
+		return shim.Error("Invalid argument count\n")
 	}
-	err := json.Unmarshal([]byte(args[0]), &input)
+	err = json.Unmarshal([]byte(args[0]), &input)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -294,18 +454,21 @@ func GetAllDistrictOfProvince(stub shim.ChaincodeStubInterface, args []string) p
 	return shim.Success(resultsAsBytes)
 }
 
-//GetAllMunicipalityOfDistrict returns all municipality of a district or all municipalities
+//GetAllMunicipalityOfDistrict defined
 func GetAllMunicipalityOfDistrict(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	input := struct {
 		DistrictName string `json:"districtName"`
 	}{}
-
-	if len(args) != 1 && len(args) != 0 {
-		return shim.Error("Expected zero or one argument")
-	}
-	err := json.Unmarshal([]byte(args[0]), &input)
+	err := CheckPermission(stub, "CAN_VIEW_MUNICIPALITY", args)
 	if err != nil {
 		return shim.Error(err.Error())
+	}
+
+	if len(args) != 1 {
+		err := json.Unmarshal([]byte(args[0]), &input)
+		if err != nil {
+			return shim.Error(err.Error())
+		}
 	}
 
 	filterByDistrictName := len(input.DistrictName) > 0
@@ -346,6 +509,7 @@ func GetAllMunicipalityOfDistrict(stub shim.ChaincodeStubInterface, args []strin
 
 		//Fetch Key
 		result.MunicipalityKey = kvResult.Key
+
 		results = append(results, result)
 	}
 
@@ -359,7 +523,7 @@ func GetAllMunicipalityOfDistrict(stub shim.ChaincodeStubInterface, args []strin
 type municipalityResponse struct {
 	MunicipalityKey  string `json:"municipalityKey"`
 	MunicipalityName string `json:"municipalityName"`
-	TotalWards       string `json:"totalWards"`
+	TotalWards       int `json:"totalWards"`
 	MunicipalityType string `json:"municipalityType"`
 }
 type districtResponse struct {
@@ -374,16 +538,20 @@ type provinceResponse struct {
 	Districts    []districtResponse `json:"districts"`
 }
 
-//GetAllAddress returns all provinces, districts and municipalities
+//GetAllAddress defined
 func GetAllAddress(stub shim.ChaincodeStubInterface, args []string) pb.Response {
-	if len(args) != 0 {
-		return shim.Error("Expected no arguments")
+	if len(args) != 1 {
+		return shim.Error("Invalid argument count.\n")
+	}
+	err := CheckPermission(stub, "CAN_VIEW_ALL_ADDRESS", args)
+	if err != nil {
+		return shim.Error(err.Error())
 	}
 
 	//Get all the values of province for running loop
 	provinceIterator, err := stub.GetStateByPartialCompositeKey("Province", []string{})
 	if err != nil {
-		shim.Error(err.Error())
+		return shim.Error(err.Error())
 	}
 	defer provinceIterator.Close()
 

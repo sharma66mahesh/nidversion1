@@ -44,16 +44,16 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 
     // at this point we should have the admin user
     // first need to register the user with the CA server
-    return fabric_ca_client.register({enrollmentID: 'user2', affiliation: 'org1.department1',role: 'client'}, admin_user);
+    return fabric_ca_client.register({enrollmentID: 'user3', affiliation: 'org1.department1',role: 'client'}, admin_user);
 }).then((secret) => {
     // next we need to enroll the user with CA server
-    console.log('Successfully registered user2 - secret:'+ secret);
+    console.log('Successfully registered user3 - secret:'+ secret);
 
-    return fabric_ca_client.enroll({enrollmentID: 'user2', enrollmentSecret: secret});
+    return fabric_ca_client.enroll({enrollmentID: 'user3', enrollmentSecret: secret});
 }).then((enrollment) => {
-  console.log('Successfully enrolled member user "user2" ');
+  console.log('Successfully enrolled member user "user3" ');
   return fabric_client.createUser(
-     {username: 'user2',
+     {username: 'user3',
      mspid: 'mohaMSP',
      cryptoContent: { privateKeyPEM: enrollment.key.toBytes(), signedCertPEM: enrollment.certificate }
      });
@@ -62,12 +62,13 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 
      return fabric_client.setUserContext(member_user);
 }).then(()=>{
-     console.log('user2 was successfully registered and enrolled and is ready to intreact with the fabric network');
+     console.log('user3 was successfully registered and enrolled and is ready to intreact with the fabric network');
 
 }).catch((err) => {
-    console.error('Failed to register: ' + err);
-	if(err.toString().indexOf('Authorization') > -1) {
+    if(err.toString().indexOf('Authorization') > -1) {
 		console.error('Authorization failures may be caused by having admin credentials from a previous CA instance.\n' +
 		'Try again after deleting the contents of the store directory '+store_path);
 	}
+    throw new Error('Failed to register: ' + err);
+	
 });
