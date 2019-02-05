@@ -81,7 +81,7 @@ function invokeChaincode (funcName, args){
 				isProposalGood = true;
 				console.log('Transaction proposal was good');
 			} else {
-				throw new Error(proposalResponses.message);
+				throw new Error(proposalResponses[0].message);
 			}
 		if (isProposalGood) {
 			console.log(util.format(
@@ -160,7 +160,7 @@ function invokeChaincode (funcName, args){
 			console.log('Transaction failed to be committed to the ledger due to ::'+results[1].event_status);
 		}
 	}).catch((err) => {
-		throw new Error('Failed to invoke successfully :: ' + err);
+		throw new Error('Failed to invoke successfully :: ' + err.message);
 	});
 }
 

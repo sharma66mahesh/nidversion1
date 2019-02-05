@@ -14,7 +14,6 @@ var util = require('util');
 var os = require('os');
 var jsonConverter = require('json-style-converter/es5')
 var CouchDB_KVS = require('fabric-client/lib/impl/CouchDBKeyValueStore');
-
 //
 var fabric_client = new Fabric_Client();
 
@@ -50,6 +49,23 @@ function marshalArgs(args) {
 	  return [JSON.stringify(snakeArgs)];
 	}
 }
+
+function unmarshalResult(result) {
+	if (!Array.isArray(result)) {
+	  return result;
+	}
+	let buff = Buffer.concat(result);
+	if (!Buffer.isBuffer(buff)) {
+	  return result;
+	}
+	let json = buff.toString('utf8');
+	if (!json) {
+	  return null;
+	}
+	let obj = JSON.parse(json);
+	return jsonConverter.snakeToCamelCase(obj);
+  }
+
 // create the key value store as defined in the fabric-client/config/default.json 'key-value-store' setting
 function queryChaincode(funcName, args) {
 	return new CouchDB_KVS({ url: couch_url
@@ -96,16 +112,15 @@ function queryChaincode(funcName, args) {
 					throw new Error('Responses from peers don\'t match');
 				}
 			}
-			return JSON.parse(value);
+			return unmarshalResult(value);
 		} else {
 			console.log('response_payloads is null');
 			throw new Error('Failed to get response on query');
 		}
-	},	(err) => {
+	}).catch((err) => {
 		console.log('Failed to send query due to error: ' + err.stack ? err.stack : err);
-		throw new Error('Failed, got error on query');
+		throw new Error('Failed, got error on query' + err);
 	});
-
 };
 
 module.exports.queryChaincode = queryChaincode
