@@ -53,7 +53,7 @@ app.post('/api/:fcn', async function(req,res) {
     invokeCC.invokeChaincode(fcn,args).then(() => {
         res.json({success: true, message: 'Chaincode invoked'}); 
     }, (err) => {
-        res.json({success: false, message: err.message});
+        res.json({success: false, message: err});
     });
 });
 
@@ -73,6 +73,6 @@ app.get('/api/:fcn', async function(req,res) {
     queryCC.queryChaincode(fcn,args).then((result) => {
         res.json({success: true, message: result}); 
     }, (err) => {
-        res.json({success: false, message: err.message});
+        res.json({success: false, message: err});
     });
 });
