@@ -4,10 +4,10 @@ files:
   - source: /
     destination: /home/ec2-user/nid-version-1
 hooks:
-  BeforeInstall:
-    - location: permissions.sh
-      runas: root
   ApplicationStart:
+    - location: permissions.sh
+      timeout: 300
+      runas: root
     - location: web/startFabric.sh
       timeout: 300
       runas: ec2-user

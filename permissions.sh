@@ -1,3 +1,3 @@
 #!/bin/bash
-chmod +x nidnetwork/startNetwork.sh
-chmod +x web/startFabric.sh
+sudo chmod +x nidnetwork/startNetwork.sh
+sudo chmod +x web/startFabric.sh
