@@ -30,11 +30,12 @@ CC_SRC_PATH=github.com/kailashChaincode
 
 
 # launch network; create channel and join peer to channel
-cd ../nidnetwork
+cd /home/ec2-user/nid-version-1/nidnetwork
+
+rm -rf ../web/hfc-key-store
 
 if [ "$1" == "prune" ]; then
 	./startNetwork.sh prune
-	rm -rf ../web/hfc-key-store
 else 
 	./startNetwork.sh
 fi
