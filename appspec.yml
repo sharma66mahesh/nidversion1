@@ -5,6 +5,9 @@ files:
     destination: /home/ec2-user/nid-version-1
 hooks:
   ApplicationStart:
+    - location: scripts/permissions.sh
+      timeout: 300
+      runas: root
     - location: web/startFabric.sh
       timeout: 300
       runas: ec2-user
