@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /home/ec2-user/nid-version-1
+    destination: /home/ubuntu/nid-version-1
 hooks:
   ApplicationStart:
     - location: scripts/permissions.sh

@@ -1,11 +1,6 @@
 #!/bin/bash
-#
-# Copyright IBM Corp All Rights Reserved
-#
-# SPDX-License-Identifier: Apache-2.0
-#
-# Exit on first error
 
+USER_NAME="ubuntu"
 CHANNEL_NAME="nid-channel"
 CHAINCODE_NAME="nidchain"
 CHAINCODE_VERSION="4.0"
@@ -25,7 +20,7 @@ starttime=$(date +%s)
 CC_SRC_PATH=github.com/chaincode/kailashChaincode
 
 # launch network; create channel and join peer to channel
-cd /home/ec2-user/nid-version-1/nidnetwork
+cd /home/${USER_NAME}/nid-version-1/nidnetwork
 
 rm -rf ../web/hfc-key-store
 

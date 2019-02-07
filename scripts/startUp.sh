@@ -1,4 +1,5 @@
 #!/bin/bash
+USER_NAME="ubuntu"
 sleep 20
 docker stop $(docker ps -q)
 docker rm $(docker ps -qa)
@@ -11,11 +12,11 @@ if [ "$CHAINCODE_IMAGES" != "" ]; then
         docker rmi -f $CHAINCODE_IMAGES
 fi
 
-cd /home/ec2-user/nid-version-1/web
+cd /home/${USER_NAME}/nid-version-1/web
 npm install
 
-rm -rf /home/ec2-user/nid-version-1/web/hfc-key-store
-/home/ec2-user/nid-version-1/web/startFabric.sh
-node /home/ec2-user/nid-version-1/web/enrollAdmin.js
-node /home/ec2-user/nid-version-1/web/registerUser.js
-forever start -a -l /home/ec2-user/logs.txt -o /home/ec2-user/output.txt -e /home/ec2-user/error.txt /home/ec2-user/nidversion1/web/app.js
+rm -rf /home/${USER_NAME}/nid-version-1/web/hfc-key-store
+/home/${USER_NAME}/nid-version-1/web/startFabric.sh
+node /home/${USER_NAME}/nid-version-1/web/enrollAdmin.js
+node /home/${USER_NAME}/nid-version-1/web/registerUser.js
+forever start -a -l /home/${USER_NAME}/logs.txt -o /home/${USER_NAME}/output.txt -e /home/${USER_NAME}/error.txt /home/${USER_NAME}/nidversion1/web/app.js
