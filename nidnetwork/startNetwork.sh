@@ -7,7 +7,7 @@ CHANNEL_NAME="nid-channel"
 
 function networkUp() {
     echo "Starting the network and waiting for 10 seconds for network to fully start up"
-    /usr/local/bin/docker-compose -f docker-compose-cli.yaml up -d
+    docker-compose -f docker-compose-cli.yaml up -d
     sleep 10
 }
 

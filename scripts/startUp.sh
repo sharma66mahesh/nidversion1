@@ -1,4 +1,5 @@
 #!/bin/bash
+PATH=${PATH}:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/bin
 USER_NAME="ubuntu"
 sleep 20
 docker stop $(docker ps -q)
