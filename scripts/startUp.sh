@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -x
 #fix "node" and "forever" not found error on codeDeploy
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
