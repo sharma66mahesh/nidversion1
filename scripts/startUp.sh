@@ -21,7 +21,7 @@ if [ "$CHAINCODE_IMAGES" != "" ]; then
 fi
 
 cd /home/${USER_NAME}/nid-version-1/web
-
+npm install
 rm -rf /home/${USER_NAME}/nid-version-1/web/hfc-key-store
 /home/${USER_NAME}/nid-version-1/web/startFabric.sh
 npm install
