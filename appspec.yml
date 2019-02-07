@@ -10,4 +10,4 @@ hooks:
       runas: root
     - location: scripts/startUp.sh
       timeout: 500
-      runas: root
+      runas: ubuntu
