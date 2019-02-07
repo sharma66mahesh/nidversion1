@@ -30,7 +30,7 @@ Capabilities:
         V1_1: true
 
     Application: &ApplicationCapabilities
-        V1_2: true
+        V1_1: true
 
 Application: &ApplicationDefaults
 

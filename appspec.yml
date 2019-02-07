@@ -9,5 +9,5 @@ hooks:
       timeout: 300
       runas: root
     - location: scripts/startUp.sh
-      timeout: 300
+      timeout: 500
       runas: root
