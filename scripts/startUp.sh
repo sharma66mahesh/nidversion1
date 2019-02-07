@@ -7,7 +7,7 @@ export NVM_DIR="$HOME/.nvm"
 
 USER_NAME="ubuntu"
 NODE_VERSION="v8.11.2"
-PATH=${PATH}:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/bin:/home/${USER_NAME}/.nvm/versions/node/${NODE_VERSION}/bin/node
+PATH=${PATH}:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/bin:/home/${USER_NAME}/.nvm/versions/node/${NODE_VERSION}/bin
 sleep 20
 docker stop $(docker ps -q)
 docker rm $(docker ps -qa)
