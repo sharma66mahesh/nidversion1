@@ -11,6 +11,9 @@ if [ "$CHAINCODE_IMAGES" != "" ]; then
         docker rmi -f $CHAINCODE_IMAGES
 fi
 
+cd /home/ec2-user/nid-version-1/web
+npm install
+
 sudo rm -rf /home/ec2-user/nid-version-1/web/hfc-key-store
 /home/ec2-user/nid-version-1/web/startFabric.sh
 node /home/ec2-user/nid-version-1/web/enrollAdmin.js
