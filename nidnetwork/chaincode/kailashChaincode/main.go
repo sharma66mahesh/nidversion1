@@ -19,7 +19,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/nid"
+	"github.com/chaincode/nid"
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	pb "github.com/hyperledger/fabric/protos/peer"
