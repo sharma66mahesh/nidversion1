@@ -21,13 +21,8 @@ CHAINCODE_VERSION="4.0"
 # fi
 
 # don't rewrite paths for Windows Git Bash users
-export MSYS_NO_PATHCONV=1
 starttime=$(date +%s)
-CC_SRC_PATH=github.com/kailashChaincode
-
-
-# clean the keystore
-
+CC_SRC_PATH=github.com/chaincode/kailashChaincode
 
 # launch network; create channel and join peer to channel
 cd /home/ec2-user/nid-version-1/nidnetwork
@@ -40,9 +35,6 @@ else
 	./startNetwork.sh
 fi
 
-# Now launch the CLI container in order to install, instantiate chaincode
-# and prime the ledger with our 10 cars
-# docker-compose -f ./docker-compose.yml up -d cli
 
 #check if chaincode is already installed
 OUTPUT=$(docker exec cli peer chaincode list --installed | grep -w $CHAINCODE_NAME)

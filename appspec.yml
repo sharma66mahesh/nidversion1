@@ -8,6 +8,6 @@ hooks:
     - location: scripts/permissions.sh
       timeout: 300
       runas: root
-    - location: web/startFabric.sh
+    - location: scripts/startUp.sh
       timeout: 300
-      runas: ec2-user
+      runas: root
